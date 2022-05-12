@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../static/lib/semanticui/semantic.css">
+    <link rel="stylesheet" th:href="@{/css/me.css}" href="../static/css/me.css">
+</head>
+<body>
+
+<div class="m-container-small m-padded-tb-massive disabled" style="max-width: 30em !important;">
+    <div class="ur container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        用户登录
+                    </div>
+                </h2>
+                <form class="ui large form" method="post" action="#" th:action="@{/login}">
+                    <div class="ui  segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="username" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="password" placeholder="密码">
+                            </div>
+                        </div>
+                        <button class="ui fluid large teal submit button">登   录</button>
+                    </div>
+
+                    <div class="ui error mini message"></div>
+                    <div class="ui mini negative message"  th:unless="${#strings.isEmpty(msg)}" th:text="${msg}">用户名或密码错误</div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!--底部footer-->
+    <div class="ui inverted vertical footer segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
+                        <div class="ui item">SpringBoot</div>
+                        <div class="ui item">SemanticUI</div>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
+                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+    <script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+
+    <script>
+        $('.ui.form').form({
+            fields : {
+                username : {
+                    identifier: 'username',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入用户名'
+                    }]
+                },
+                password : {
+                    identifier: 'password',
+                    rules: [{
+                        type : 'empty',
+                        prompt: '请输入密码'
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

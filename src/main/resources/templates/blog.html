@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../static/lib/semanticui/semantic.css">
+    <link rel="stylesheet" th:href="@{/css/me.css}" href="../static/css/me.css">
+</head>
+<body>
+    <!--导航栏-->
+    <div class="ui top fixed teal huge menu inverted">
+        <div class="ui container">
+            <a href="#" class="item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item"><i class="icon like"></i>收藏</a>
+            <a href="#" class="item"><i class="icon edit"></i>分享</a>
+            <div class="item">
+                <div class="ui icon inverted transparent input">
+                    <input type="text" placeholder="Search..."/>
+                    <i class="search link icon "></i>
+                </div>
+            </div>
+            <div class="right menu">
+                <a class="ui large item button"><i class="icon sign-in"></i>登录</a>
+                <a class="ui large item button"><i class="icon edit"></i>注册</a>
+            </div>
+        </div>
+    </div>
+
+    <!--中间内容-->
+    <div class="ui container m-margin-top-large">
+        <div class="ui segments">
+            <!--显示作者信息部分-->
+            <div class="ui segment">
+                <div class="ui horizontal link list">
+                    <div class="item">
+                        <img src="https://picsum.photos/id/110/150/200" alt="" class="ui avatar image">
+                        <div class="content">
+                            <div class="header ">
+                                Sitweling
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="calendar icon"></i> 2022-3-29
+                    </div>
+                    <div class="item">
+                        <i class="eye icon"></i> 2345
+                    </div>
+                </div>
+            </div>
+            <!--显示正文内容部分-->
+            <div class="ui segment">
+                <div class="item">
+                    <p class="ui text m-padded-all-huge m-text">【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
+                </div>
+                <div class="ui item">
+                    <div class="ui images">
+                        <div class="item">
+                            <img class="ui centered image" src="https://picsum.photos/800/600" >
+                        </div>
+                        <div class="item">
+                            <img class="ui centered image" src="https://picsum.photos/800/600" >
+                        </div>
+                        <div class="item">
+                            <img class="ui centered image" src="https://picsum.photos/800/600" >
+                        </div>
+                        <div class="item">
+                            <img class="ui centered image" src="https://picsum.photos/800/600" >
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <!--下方功能区segment-->
+            <div class="ui segment attached">
+                <div class="ui three item menu">
+                    <a class=" item"><i class="icon star outline"></i>收藏</a>
+                    <a class=" item"><i class="icon comment alternate"></i>评论</a>
+                    <a class=" item"><i class="icon heart outline"></i>喜欢</a>
+                </div>
+            </div>
+            <!--评论区-->
+            <div id="comment-container" class="ui bottom attached segment">
+                <!--留言区域-->
+                <div class="ui teal segment">
+                    <div class="ui comments">
+                        <h3 class="ui dividing header">评论区</h3>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://picsum.photos/id/110/100/100">
+                            </a>
+                            <div class="content">
+                                <a class="author">Matt</a>
+                                <div class="metadata">
+                                    <span class="date">今天下午 5:42</span>
+                                </div>
+                                <div class="text">太赞了！ </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://picsum.photos/id/100/100/100">
+                            </a>
+                            <div class="content">
+                                <a class="author">Elliot Fu</a>
+                                <div class="metadata">
+                                    <span class="date">昨天上午12:30</span>
+                                </div>
+                                <div class="text">
+                                    <p>這對我的研究是非常有用.謝謝!</p>
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                            <div class="comments">
+                                <div class="comment">
+                                    <a class="avatar">
+                                        <img src="https://picsum.photos/id/130/100/100">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author">Jenny Hess</a>
+                                        <div class="metadata">
+                                            <span class="date">刚刚</span>
+                                        </div>
+                                        <div class="text">艾略特你永远是多么正确 :) </div>
+                                        <div class="actions">
+                                            <a class="reply">Reply</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://picsum.photos/id/111/100/100">
+                            </a>
+                            <div class="content">
+                                <a class="author">Joe Henderson</a>
+                                <div class="metadata">
+                                    <span class="date">5 天以前</span>
+                                </div>
+                                <div class="text">老兄，这太棒了。非常感谢。 </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--提交留言区域-->
+                <div class="ui form">
+                    <div class="field">
+                        <textarea name="content" placeholder="请输入评论信息..."></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="right aligned field">
+                            <button class="ui teal button icon m-mobile-wide"><i class="edit icon"></i> 发布</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!--底部footer-->
+    <div class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
+                        <div class="ui item">SpringBoot</div>
+                        <div class="ui item">SemanticUI</div>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
+                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+    <script th:src="@{/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+</body>
+</html>

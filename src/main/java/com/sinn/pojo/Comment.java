@@ -18,13 +18,20 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "t_comment",autoResultMap = true)
+@TableName(value = "t_comment")
+//实体类字段和数据库字段一一对应
 public class Comment {
-    @TableId(type = IdType.AUTO)
-    private Long commentId;
+    private Long id;
+
     private String content;
+
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    @TableField(exist = false)
+
+    private Integer userId;
+
+    private Integer BlogId;
+   /* @TableField(exist = false)
     private Comment parentComment;
     //回复评论
     @TableField(exist = false)
@@ -32,7 +39,6 @@ public class Comment {
     @TableField(exist = false)
     private User user;
     @TableField(exist = false)
-    private Blog blog;
-    @TableLogic
+    private Blog blog;*/
     private Integer isDelete;
 }

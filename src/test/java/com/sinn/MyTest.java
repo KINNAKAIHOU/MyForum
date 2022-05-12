@@ -31,7 +31,7 @@ public class MyTest {
     @Test
     public void test2(){
         User user = new User();
-        user.setUserName("测试账号X");
+        user.setUserName("Sinn");
         user.setPassword("123456");
         userMapper.insert(user);
         System.out.println(user);
@@ -39,8 +39,9 @@ public class MyTest {
     @Test
     public void test3(){
         User user = new User();
-        user.setUserId(2L);
+        user.setId(13L);
         user.setUserName("测试账号4");
+        user.setPassword("6452131");
         int i = userMapper.updateById(user);
         System.out.println(user);
     }

@@ -1,6 +1,7 @@
 package com.sinn.pojo;
 
 import ch.qos.logback.classic.pattern.LineOfCallerConverter;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -18,14 +20,19 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "t_picture",autoResultMap = true)
+@TableName(value = "t_picture")
 public class Picture {
-    private Long pictureId;
+    private Long id;
+
     private String name;
+
     private String location;
-    private LineOfCallerConverter createTime;
-    @TableField(exist = false)
-    private Blog blog;
-    @TableLogic
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    private Integer blogId;
+   /* @TableField(exist = false)
+    private Blog blog;*/
     private Integer isDelete;
 }

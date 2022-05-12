@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * @Description:
+ * @Description: 自动加入创建时间和更新时间
  * @Author: Sitweling
  * @CreateTime: 2022/5/6
  */
@@ -26,6 +26,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
-        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
     }
 }

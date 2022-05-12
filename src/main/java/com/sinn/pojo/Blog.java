@@ -17,22 +17,39 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "t_blog" ,autoResultMap = true)
+@TableName(value = "t_blog")
+//实体类字段和数据库字段一一对应
 public class Blog {
-    @TableId(type = IdType.AUTO)
-    private Long blogId;
+    private Long id;
+
     private String title;
+
     private String content;
+
     private Integer shareStatement;
+
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
     private Integer views;
+
     private Integer loveCount;
+
     private Integer favoriteCount;
+
     private Integer seeAble;
+
     private Integer loveAble;
+
     private Integer commentAble;
-    //外键约束转化成实体对象
+
+    private Long userId;
+
+    private Integer isDelete;
+    /*//外键约束转化成实体对象
     @TableField(exist = false)
     private User user;
     @TableLogic
@@ -49,6 +66,6 @@ public class Blog {
     private List<User> loves;
 
     @TableField(exist = false)
-    private List<User> favorites;
+    private List<User> favorites;*/
 
 }

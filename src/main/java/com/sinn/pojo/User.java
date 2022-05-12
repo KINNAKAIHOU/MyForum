@@ -17,19 +17,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "t_user",autoResultMap = true)
+@TableName(value = "t_user")
 public class User {
     //本身字段
-    @TableId(type = IdType.AUTO)
-    private Long userId;
+    private Long id;
     private String userName;
     private String password;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    private Integer isBan;
-    //以下是一对多
+    private Boolean isBan;
+    /*//以下是一对多
     @TableField(exist = false)
     private List<Blog> blogs;
 
@@ -40,5 +39,5 @@ public class User {
     private List<Blog> favorites;
 
     @TableField(exist = false)
-    private List<Comment> comments;
+    private List<Comment> comments;*/
 }
