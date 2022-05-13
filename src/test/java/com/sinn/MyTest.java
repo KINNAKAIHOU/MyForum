@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @Description:
@@ -31,7 +33,7 @@ public class MyTest {
     @Test
     public void test2(){
         User user = new User();
-        user.setUserName("Sinn");
+        user.setUserName("TestUser1");
         user.setPassword("123456");
         userMapper.insert(user);
         System.out.println(user);
@@ -44,6 +46,22 @@ public class MyTest {
         user.setPassword("6452131");
         int i = userMapper.updateById(user);
         System.out.println(user);
+    }
+
+    @Test
+    public void test4(){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user=new User();
+        user.setUserName("user123");
+        String encode = encoder.encode("123456");
+        user.setPassword(encode);
+        userMapper.insert(user);
+    }
+
+    @Test
+    public void Test5(){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println(encoder.matches("123456", encoder.encode("123456")));
     }
 
 }

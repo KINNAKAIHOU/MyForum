@@ -12,16 +12,27 @@
         <div class="ui container">
             <a href="#" class="active item"><i class="home icon"></i>首页</a>
             <a href="#" class="item"><i class="icon like"></i>收藏</a>
-            <a href="#" class="item"><i class="icon edit"></i>分享</a>
+            <a href="#" th:href="@{/loginUser/blogs}" class="item"><i class="icon edit"></i>分享</a>
             <div class="item">
                 <div class="ui icon inverted transparent input">
                     <input type="text" placeholder="Search..."/>
                     <i class="search link icon "></i>
                 </div>
             </div>
-            <div class="right menu">
+            <div th:unless="${userDetails}" class="right menu">
                 <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
-                <a class="ui large item button"><i class="icon edit"></i>注册</a>
+                <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
+            </div>
+            <div th:if="${userDetails}" class="right menu">
+                <div class="ui dropdown item">
+                    <div class="text" th:text="${userDetails.getUsername()}">
+                        Sinn
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/logout}" class="item">注销</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -466,5 +477,10 @@
 
     <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
     <script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown({
+            on : 'hover'
+        });
+    </script>
 </body>
 </html>

@@ -10,6 +10,8 @@ logging:
   level:
     root: info
     com.sinn: debug
+  file:
+    name: log/forum-dev.log
 
 mybatis-plus:
   type-aliases-package: com.sinn.pojo
@@ -25,4 +27,3 @@ mybatis-plus:
       logic-not-delete-value: 0
       logic-delete-value: 1
       id-type: auto
-

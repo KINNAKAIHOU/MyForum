@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             authorityList.add(authority);
         }
         UserDetails userDetails=new org.springframework.security.core.userdetails.User(user.getUserName(),
-                user.getPassword(),user.getIsBan(),true,true,true,authorityList);
+                user.getPassword(), user.getIsBan(),true,true,true,authorityList);
         return userDetails;
     }
 }
