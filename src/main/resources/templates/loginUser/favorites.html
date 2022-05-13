@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
-    <link rel="stylesheet" href="../../static/lib/semanticui/semantic.css">
-    <link rel="stylesheet" href="../../static/css/me.css">
+    <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../../static/lib/semanticui/semantic.css">
+    <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
 </head>
 <body>
     <!--导航栏-->
@@ -160,8 +160,8 @@
         </div>
     </div>
 
-    <script src="../../static/js/jquery-3.6.0.js"></script>
-    <script src="../../static/lib/semanticui/semantic.js"></script>
+    <script th:src="@{/js/jquery-3.6.0.js}" src="../../static/js/jquery-3.6.0.js"></script>
+    <script th:src="@{/lib/semanticui/semantic.js}" src="../../static/lib/semanticui/semantic.js"></script>
 
     <script>
         $('.ui.dropdown').dropdown({
