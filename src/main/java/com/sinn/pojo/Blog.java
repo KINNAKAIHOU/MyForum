@@ -26,7 +26,7 @@ public class Blog {
 
     private String content;
 
-    private Integer shareStatement;
+    private Boolean shareStatement;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
@@ -40,11 +40,11 @@ public class Blog {
 
     private Integer favoriteCount;
 
-    private Integer seeAble;
+    private Boolean seeAble;
 
-    private Integer loveAble;
+    private Boolean loveAble;
 
-    private Integer commentAble;
+    private Boolean commentAble;
 
     private Long userId;
 

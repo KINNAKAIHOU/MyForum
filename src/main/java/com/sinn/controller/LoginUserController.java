@@ -3,6 +3,7 @@ package com.sinn.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sinn.pojo.Blog;
 import com.sinn.pojo.User;
+import com.sinn.service.BlogService;
 import com.sinn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,9 @@ public class LoginUserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    BlogService blogService;
+
     /*@{/loginUser/{name}/blogs(name=${userDetails.getUsername()})}*/
 
     /**
@@ -48,16 +52,36 @@ public class LoginUserController {
     }
 
     //@{/loginUser/{name}/blogInput(name=${session.user.getUserName()})}
+
+    /**
+     * 前往微博发布页面
+     * @param name
+     * @return
+     */
     @RequestMapping("{name}/blogInput")
-    public String myBlogInput(@PathVariable String name){
+    public String myBlogInput(@PathVariable String name,Model model){
+        model.addAttribute("blog",new Blog());
         return "loginUser/blog-input";
     }
 
+    /**
+     * 发布新微博
+     * @param blog
+     * @param attributes
+     * @param session
+     * @return
+     */
     @PostMapping("/release")
     public String releaseBlog(Blog blog, RedirectAttributes attributes, HttpSession session){
         User user = (User) session.getAttribute("user");
-        String userName = user.getUserName();
-
-        return "redirect:/loginUser/"+userName+"/blogs";
+        blog.setUserId(user.getId());
+        blogService.save(blog);
+        boolean res = blogService.updateById(blog);
+        if(res){
+            attributes.addFlashAttribute("msg","操作成功");
+        }else{
+            attributes.addFlashAttribute("msg","操作失败");
+        }
+        return "redirect:/loginUser/"+user.getUserName()+"/blogs";
     }
 }

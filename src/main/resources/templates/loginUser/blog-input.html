@@ -36,14 +36,19 @@
 
     <!--中间内容-->
     <div class="ui container m-margin-top-large">
-        <form action="#" th:action="@{/loginUser/release}" method="post" class="ui form">
+        <form action="#" id="blog-form" th:object="${blog}" th:action="@{/loginUser/release}" method="post" class="ui form">
+            <!--隐藏域-->
+            <input type="hidden" name="shareStatement">
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="views">
+            <!--id为隐藏域-->
             <div class="ui segments">
                 <div class="ui segment">
                     <!--标题-->
                     <div class="required ">
                         <div class="ui labeled field input">
                             <div class="ui label"> 标 题 </div>
-                            <input type="text" name="title" placeholder="请输入分享的标题">
+                            <input type="text" th:value="*{title}" name="title" placeholder="请输入分享的标题">
                         </div>
                     </div>
                 </div>
@@ -52,7 +57,7 @@
             <div class="ui segment">
                 <div class="field" >
                     <label>分享内容</label>
-                    <textarea name="detailContent" placeholder="请输入分享内容"></textarea>
+                    <textarea th:text="*{content}" name="content" placeholder="请输入分享内容"></textarea>
                 </div>
             </div>
 
@@ -60,20 +65,20 @@
                 <div class="inline fields">
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" id="shareInfo" name="shareInfo" class="hidden">
-                            <label for="shareInfo">查看</label>
+                            <input th:checked="*{seeAble}" type="checkbox" id="seeAble" name="seeAble" class="hidden">
+                            <label for="seeAble">查看</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" id="appreciation" name="appreciation" class="hidden">
-                            <label for="appreciation">点赞</label>
+                            <input th:checked="*{loveAble}" type="checkbox" id="loveAble" name="loveAble" class="hidden">
+                            <label for="loveAble">点赞</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" id="comment" name="comment" class="hidden">
-                            <label for="comment">留言</label>
+                            <input th:checked="*{commentAble}" type="checkbox" id="commentAble" name="commentAble" class="hidden">
+                            <label for="commentAble">留言</label>
                         </div>
                     </div>
                 </div>
@@ -83,12 +88,12 @@
                 </div>
                 <div class="ui right aligned container">
                     <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
-                    <button class="ui secondary button">保存</button>
-                    <button class="ui teal button">发布</button>
+                    <button id="save-btn" class="ui secondary button">保存</button>
+                    <button id="publish-btn" class="ui teal button">发布</button>
                 </div>
             </div>
         </form>
-        <form action="#" enctype="multipart/form-data">
+        <form action="#" th:href="@{}" enctype="multipart/form-data">
 <!--            <div class="ui left aligned">
                 <div class="ui right labeled left icon input">
                     <i class="tags icon"></i>
@@ -98,13 +103,11 @@
                 <input type="submit" value="Upload" />
             </div>-->
             <div class="ui action input">
-                <input type="file" multiple accept="image/*" placeholder="添加图片">
+                <input type="file"  multiple accept="image/*" placeholder="添加图片">
                 <button class="ui button">上传图片</button>
             </div>
 
-            <div class="ui success message">
-
-            </div>
+            <div class="ui success message"></div>
         </form>
     </div>
 
@@ -188,6 +191,16 @@
                 }
             }
         })
+
+        /*博客发布还是保存*/
+        $("#save-btn").click(function (){
+            $("[name='shareStatement']").val(false);
+            $("#blog-form").submit();
+        });
+        $("#publish-btn").click(function (){
+            $("[name='shareStatement']").val(true);
+            $("#blog-form").submit();
+        });
     </script>
 </body>
 </html>

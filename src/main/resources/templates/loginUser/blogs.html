@@ -105,6 +105,12 @@
             </table>
         </div>
 
+        <!--showMessage-->
+        <div class="ui success message" th:unless="${#strings.isEmpty(msg)}">
+            <i class="close icon"></i>
+            <div class="header">Tips:</div>
+            <p th:text="${msg}">Congratulations! Optional success</p>
+        </div>
     </div>
 
     <br>

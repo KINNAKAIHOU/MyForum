@@ -1,4 +1,4 @@
-package com.sinn.pojo.dto;
+package com.sinn.pojo.Vo;
 
 import com.sinn.pojo.Role;
 import com.sinn.pojo.User;
@@ -16,6 +16,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto extends User {
+public class UserVo extends User {
     List<Role> roles;
 }
