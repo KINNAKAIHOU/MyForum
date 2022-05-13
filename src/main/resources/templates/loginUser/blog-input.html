@@ -39,7 +39,7 @@
         <form action="#" id="blog-form" th:object="${blog}" th:action="@{/loginUser/release}" method="post" class="ui form">
             <!--隐藏域-->
             <input type="hidden" name="shareStatement">
-            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="id" id="blogId" th:value="*{id}">
             <input type="hidden" name="views">
             <!--id为隐藏域-->
             <div class="ui segments">
@@ -93,49 +93,51 @@
                 </div>
             </div>
         </form>
-        <form action="#" th:href="@{}" enctype="multipart/form-data">
-<!--            <div class="ui left aligned">
-                <div class="ui right labeled left icon input">
-                    <i class="tags icon"></i>
-                    <input type="file" multiple accept="image/*" placeholder="添加图片">
-                    <a class="ui tag label">请添加图片</a>
-                </div>
-                <input type="submit" value="Upload" />
-            </div>-->
-            <div class="ui action input">
-                <input type="file"  multiple accept="image/*" placeholder="添加图片">
-                <button class="ui button">上传图片</button>
-            </div>
 
+
+        <!--文件上传表单-->
+
+        <form enctype="multipart/form-data" id="fileForm">
+            <div class="ui action input">
+                <input type="file"  id="files" name="files" multiple accept="image/*" placeholder="添加图片">
+                <button  id="files-btn" type="button" class="ui button">上传图片</button>
+            </div>
             <div class="ui success message"></div>
         </form>
+
+        <div class="ui small images">
+
+        </div>
     </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
 
     <!--底部footer-->
     <div class="ui inverted vertical footer segment m-padded-tb-massive">
@@ -192,7 +194,7 @@
             }
         })
 
-        /*博客发布还是保存*/
+        /*微博发布还是保存*/
         $("#save-btn").click(function (){
             $("[name='shareStatement']").val(false);
             $("#blog-form").submit();
@@ -201,6 +203,47 @@
             $("[name='shareStatement']").val(true);
             $("#blog-form").submit();
         });
+
+        $("#files-btn").click(function (){
+            console.log($("#files").val());
+            if($("#files").val() == ''){
+                return ;
+            }
+            console.log("调用上传文件方法")
+            let formData=new FormData();
+            // console.log(document.getElementById("files").firstChild);
+            let fileList= document.getElementById("files");
+            let files=$("#files")[0].files;
+/*            fileList.addEventListener("change",(event)=>{
+                let files= event.target.files;
+                console.log("files: "+files);
+                for (let i = 0; i < files.length; i++) {
+                    formData.append(files[i].name, files[i])
+                    console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+                }
+                console.log("formData： "+formData);
+            });*/
+            for (let i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i])
+                console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+            }
+            $.ajax({
+                url: "http://localhost:8080/release/images/"+$("#blogId").val(),
+                type: 'POST',
+                data: new FormData($("#fileForm")[0]),
+                processData : false,
+                contentType : false,
+                async:false,
+                success:function(data) {
+                    console.log(data);
+                    $(".ui .success .message").text(data);
+                },
+                error: function (returnData) {
+                    console.log(returnData);
+                    $(".ui .error .message").text(returnData);
+                }
+            });
+        })
     </script>
 </body>
 </html>
