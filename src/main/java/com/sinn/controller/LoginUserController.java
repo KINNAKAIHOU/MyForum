@@ -37,10 +37,10 @@ public class LoginUserController {
     @Autowired
     BlogMapper blogMapper;
 
-    /*@{/loginUser/{name}/blogs(name=${userDetails.getUsername()})}*/
 
     /**
      * 点击查看个人发布的全部微博
+     * 用户信息从Authentication中获取，增加了一丝的安全性。（笑
      * @param name
      * @param model
      * @param auth
@@ -49,8 +49,10 @@ public class LoginUserController {
     @RequestMapping("/{name}/blogs")
     public String toMyBlogs(@PathVariable String name, Model model, Authentication auth, HttpServletRequest request){
         model.addAttribute("userDetails", auth.getPrincipal());
+        log.info("getPrincipal是："+auth.getPrincipal().toString());
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName,name);
+        queryWrapper.eq(User::getUserName,principal.getUsername());
         User user = userService.getOne(queryWrapper);
         request.getSession().setAttribute("user",user);
         LambdaQueryWrapper<Blog> blogWrapper=new LambdaQueryWrapper<>();
@@ -118,6 +120,6 @@ public class LoginUserController {
     public String deleteBlog(@PathVariable("blogId") Integer blogId,HttpSession session){
         User user = (User) session.getAttribute("user");
         blogMapper.deleteById(blogId);
-        return user.getUserName()+"/blogs";
+        return "redirect:/loginUser/"+user.getUserName()+"/blogs";
     }
 }
