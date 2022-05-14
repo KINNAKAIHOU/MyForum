@@ -75,7 +75,7 @@ public class IndexController {
 
     /**
      * 注册用户，只要求输入用户名和密码，用户名是唯一的
-     * 通过MP字段自动注入完成注册日期
+     * 通过MP字段自动注入完成注册日期，并且添加授权
      * @param username
      * @param password
      * @return

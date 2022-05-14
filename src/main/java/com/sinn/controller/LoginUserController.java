@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,6 +102,7 @@ public class LoginUserController {
     public String releaseBlog(Blog blog, RedirectAttributes attributes, HttpSession session){
         log.info("确认发布一个博客");
         User user = (User) session.getAttribute("user");
+        System.out.println(blog);
         blog.setUserId(user.getId());
         log.info("blog Id是"+blog.getId().toString());
         boolean res = blogService.updateById(blog);

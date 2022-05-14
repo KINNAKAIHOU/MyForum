@@ -40,11 +40,11 @@ public class Blog {
 
     private Integer favoriteCount;
 
-    private Boolean seeAble;
+    private boolean seeAble;
 
-    private Boolean loveAble;
+    private boolean loveAble;
 
-    private Boolean commentAble;
+    private boolean commentAble;
 
     private Long userId;
 
