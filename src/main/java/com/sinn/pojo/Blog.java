@@ -26,7 +26,7 @@ public class Blog {
 
     private String content;
 
-    private Boolean shareStatement;
+    private boolean shareStatement;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
