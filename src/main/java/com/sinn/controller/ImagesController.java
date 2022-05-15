@@ -32,10 +32,10 @@ public class ImagesController {
 
     /*http://localhost:8080/release/images/29*/
     @PostMapping("/release/images/{blogId}")
-    public List<String> upLoadImages(@RequestParam("files") MultipartFile[] files, @PathVariable Integer blogId){
+    public String upLoadImages(@RequestParam("files") MultipartFile[] files, @PathVariable Integer blogId){
         log.info("进入增加图片方法");
         log.info("传递的参数是："+files +"   Id是：  "+blogId);
-        List<String> messages = new ArrayList<>();
+        StringBuilder sb=new StringBuilder();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 String orgName = file.getOriginalFilename();
@@ -46,16 +46,16 @@ public class ImagesController {
                     Picture picture = new Picture();
                     picture.setBlogId(blogId);
                     picture.setName(destName);
-                    picture.setLocation(uploadRootPath+"/"+destName);
+                    picture.setLocation("/image/"+destName);
                     pictureService.save(picture);
-                    messages.add(orgName + " 上传成功!");
+                    sb.append(orgName + " 上传成功!"+"\n");
                 } catch (IllegalStateException | IOException e) {
                     e.printStackTrace();
-                    messages.add(orgName + " 上传失败: " + e.getMessage());
+                    sb.append(orgName + " 上传失败: " + e.getMessage());
                 }
             }
         }
         log.info("完成图片添加");
-        return messages;
+        return sb.toString();
     }
 }

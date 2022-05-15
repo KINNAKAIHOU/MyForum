@@ -34,5 +34,4 @@ public class Picture {
     private Integer blogId;
    /* @TableField(exist = false)
     private Blog blog;*/
-    private Integer isDelete;
 }

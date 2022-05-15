@@ -12,21 +12,21 @@
     <div class="ui top fixed teal huge menu inverted">
         <div class="ui container">
             <a href="#" th:href="@{/index}" class=" item"><i class="home icon"></i>首页</a>
-            <a href="#" th:if="${userDetails}" th:href="@{/favorites/{name}/blogs(name=${userDetails.getUsername()})}" class="item"><i class="icon like"></i>收藏</a>
-            <a href="#" th:if="${userDetails}"  th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}" class="item"><i class="icon edit"></i>分享</a>
+            <a href="#" th:if="${session.user}" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
+            <a href="#" th:if="${session.user}"  th:href="@{/loginUser/{name}/blogs(name=${session.user}==null ? -1 : ${session.user.getUserName()} )}" class="item"><i class="icon edit"></i>分享</a>
             <div class="item">
                 <div class="ui icon inverted transparent input">
                     <input type="text" placeholder="Search..."/>
                     <i class="search link icon "></i>
                 </div>
             </div>
-            <div th:unless="${userDetails}" class="right menu">
+            <div th:unless="${session.user}" class="right menu">
                 <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
                 <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
             </div>
-            <div th:if="${userDetails}" class="right menu">
+            <div th:if="${session.user}" class="right menu">
                 <div class="ui dropdown item">
-                    <div class="text" th:text="${userDetails.getUsername()}">
+                    <div class="text" th:text="${session.user.getUserName()}">
                         Sinn
                     </div>
                     <i class="dropdown icon"></i>
@@ -47,28 +47,28 @@
                     <div class="item">
                         <img src="https://picsum.photos/id/110/150/200" alt="" class="ui avatar image">
                         <div class="content">
-                            <div class="header ">
+                            <div th:text="${blogVo.getUserName()}" class="header ">
                                 Sitweling
                             </div>
                         </div>
                     </div>
                     <div class="item">
-                        <i class="calendar icon"></i> 2022-3-29
+                        <i class="calendar icon"></i> <span th:text="${blogVo.getUpdateTime()}">2022-3-29</span>
                     </div>
                     <div class="item">
-                        <i class="eye icon"></i> 2345
+                        <i class="eye icon"></i> <span th:text="${blogVo.getViews()}">2345</span>
                     </div>
                 </div>
             </div>
             <!--显示正文内容部分-->
             <div class="ui segment">
                 <div class="item">
-                    <p class="ui text m-padded-all-huge m-text">【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
+                    <p th:text="${blogVo.getContent()}" class="ui text m-padded-all-huge m-text">【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
                 </div>
                 <div class="ui item">
                     <div class="ui images">
-                        <div class="item">
-                            <img class="ui centered image" src="https://picsum.photos/800/600" >
+                        <div th:each="blogPic : ${blogVo.getPictures()}" class="item">
+                            <img th:src="@{${blogPic.getLocation()}}" class="ui centered image" src="https://picsum.photos/800/600" >
                         </div>
                         <div class="item">
                             <img class="ui centered image" src="https://picsum.photos/800/600" >
@@ -232,6 +232,11 @@
     </div>
 
     <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
-    <script th:src="@{/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+    <script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+    <script>
+        $('.ui.dropdown').dropdown({
+            on : 'hover'
+        });
+    </script>
 </body>
 </html>

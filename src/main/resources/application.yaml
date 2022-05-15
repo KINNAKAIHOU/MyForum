@@ -6,7 +6,7 @@ spring:
     password: root
   servlet:
     multipart:
-      location: E:/upload/demo2
+      location: E:/upload/demo2/
       max-file-size: 100MB
       max-request-size: 100MB
 

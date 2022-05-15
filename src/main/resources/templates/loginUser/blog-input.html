@@ -11,7 +11,7 @@
     <div class="ui top fixed teal huge menu inverted">
         <div class="ui container">
             <a href="#" th:href="@{/index}" class="item"><i class="home icon"></i>首页</a>
-            <a href="#" th:href="@{/loginUser/{name}/favorites(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
+            <a href="#" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:href="@{/loginUser/{name}/blogs(name=${session.user.getUserName()})}" class="active item"><i class="icon edit"></i>分享</a>
             <div class="item">
                 <div class="ui icon inverted transparent input">
@@ -102,11 +102,11 @@
                 <input type="file"  id="files" name="files" multiple accept="image/*" placeholder="添加图片">
                 <button  id="files-btn" type="button" class="ui button">上传图片</button>
             </div>
+            <!--返回成功消息-->
             <div class="ui success message"></div>
         </form>
 
         <div class="ui small images">
-
         </div>
     </div>
 
@@ -181,14 +181,14 @@
                     identifier : 'title',
                     rules : [{
                         type : 'empty',
-                        prompt : '标题：请输入博客的标题'
+                        prompt : '标题：请输入分享的标题'
                     }]
                 },
                 detailContent :{
                     identifier: 'detailContent',
                     rules: [{
                         type: 'empty',
-                        prompt: '请输入内容'
+                        prompt: '请输入分享的内容'
                     }]
                 }
             }
@@ -236,7 +236,7 @@
                 async:false,
                 success:function(data) {
                     console.log(data);
-                    $(".ui .success .message").text(data);
+                    $(".ui.success.message").text(data);
                 },
                 error: function (returnData) {
                     console.log(returnData);
