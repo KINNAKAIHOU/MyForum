@@ -3,9 +3,15 @@ package com.sinn.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sinn.mapper.UserMapper;
 import com.sinn.mapper.UserRoleRelationMapper;
+import com.sinn.pojo.Blog;
+import com.sinn.pojo.Picture;
 import com.sinn.pojo.User;
 import com.sinn.pojo.UserRoleRelation;
+import com.sinn.pojo.Vo.BlogVo;
+import com.sinn.service.BlogService;
+import com.sinn.service.PictureService;
 import com.sinn.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @Description:
@@ -33,11 +41,18 @@ public class IndexController {
     UserService userService;
 
     @Autowired
+    BlogService blogService;
+
+    @Autowired
+    PictureService pictureService;
+
+    @Autowired
     UserRoleRelationMapper userRoleRelationMapper;
     /**
      * 直接进入首页
      * 判断是否已经登陆，未登录则直接进入首页
      * 已登陆的情况下，将User对象放入Session中
+     * 加入已存在的微博渲染
      * @return index
      */
     @RequestMapping({"/","/index"})
@@ -50,6 +65,41 @@ public class IndexController {
             User user = userService.getOne(queryWrapper);
             session.setAttribute("user",user);
         }
+        //渲染微博
+        LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
+        blogQw.eq(Blog::isShareStatement,true)     //是分享状态
+                 .eq(Blog::isSeeAble,true)        //是可见状态
+                .orderByDesc(Blog::getUpdateTime);
+        List<Blog> blogList = blogService.list(blogQw);
+            //获取其他信息封装成Vo
+        List<BlogVo> blogVos=new LinkedList<>();
+        for(Blog eachBlog: blogList){
+            BlogVo blogVo = new BlogVo();
+            BeanUtils.copyProperties(eachBlog,blogVo);
+            //1.封装用户名信息
+            User AuthorUser = userMapper.selectById(blogVo.getUserId());
+            blogVo.setUserName(AuthorUser.getUserName());
+            //2.封装图片信息
+            LambdaQueryWrapper<Picture> pictureQw=new LambdaQueryWrapper<>();
+            pictureQw.eq(Picture::getBlogId,blogVo.getId());
+            List<Picture> pictureList = pictureService.list(pictureQw);
+            blogVo.setPictures(pictureList);
+
+
+            //最后添加
+            blogVos.add(blogVo);
+        }
+
+
+        //侧边栏最新发布微博
+        LambdaQueryWrapper<Blog> blogQw2=new LambdaQueryWrapper<>();
+        blogQw2.orderByDesc(Blog::getUpdateTime);
+        List<Blog> newestBlogs = blogService.list(blogQw2);
+
+        //点赞排行耪
+
+        model.addAttribute("blogVoList",blogVos);
+        model.addAttribute("newestBlogs",newestBlogs);
         model.addAttribute("userDetails", userDetails);
         return "index";
     }

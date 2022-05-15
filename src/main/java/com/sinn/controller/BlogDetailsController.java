@@ -49,6 +49,8 @@ public class BlogDetailsController {
         LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
         blogQw.eq(Blog::getId,blogId);
         Blog blog = blogService.getOne(blogQw);
+        blog.setViews(blog.getViews()+1);
+        blogService.updateById(blog);
         BlogVo blogVo=new BlogVo();
         BeanUtils.copyProperties(blog,blogVo);
         User AuthorUser = userMapper.selectById(blogVo.getUserId());

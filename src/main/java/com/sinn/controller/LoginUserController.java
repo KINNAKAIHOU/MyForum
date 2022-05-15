@@ -3,10 +3,14 @@ package com.sinn.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sinn.mapper.BlogMapper;
 import com.sinn.pojo.Blog;
+import com.sinn.pojo.Picture;
 import com.sinn.pojo.User;
+import com.sinn.pojo.Vo.BlogVo;
 import com.sinn.service.BlogService;
+import com.sinn.service.PictureService;
 import com.sinn.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -36,6 +40,9 @@ public class LoginUserController {
 
     @Autowired
     BlogMapper blogMapper;
+
+    @Autowired
+    PictureService pictureService;
 
 
     /**
