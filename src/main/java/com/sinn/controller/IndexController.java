@@ -25,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -66,9 +68,12 @@ public class IndexController {
             session.setAttribute("user",user);
         }
         //渲染微博
+        Set<Long> enableUserIds = getEnableUserIds();
+
         LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
         blogQw.eq(Blog::isShareStatement,true)     //是分享状态
                  .eq(Blog::isSeeAble,true)        //是可见状态
+                .in(Blog::getUserId,enableUserIds)    //用户是可用状态
                 .orderByDesc(Blog::getUpdateTime);
         List<Blog> blogList = blogService.list(blogQw);
             //获取其他信息封装成Vo
@@ -93,10 +98,12 @@ public class IndexController {
 
         //侧边栏最新发布微博
         LambdaQueryWrapper<Blog> blogQw2=new LambdaQueryWrapper<>();
-        blogQw2.orderByDesc(Blog::getUpdateTime);
+        blogQw2.in(Blog::getUserId,enableUserIds)
+                .orderByDesc(Blog::getUpdateTime);
         List<Blog> newestBlogs = blogService.list(blogQw2);
 
         //点赞排行耪
+
 
         model.addAttribute("blogVoList",blogVos);
         model.addAttribute("newestBlogs",newestBlogs);
@@ -142,6 +149,18 @@ public class IndexController {
         relation.setUserId(user.getId());
         userRoleRelationMapper.insert(relation);
         return "index";
+    }
+
+    /**
+     * 获取可用状态下的UserIds，封装成一个Set返回
+     * @return
+     */
+    public Set<Long> getEnableUserIds(){
+        LambdaQueryWrapper<User> userQw=new LambdaQueryWrapper<>();
+        userQw.eq(User::isStatus,true);
+        List<User> enableUserList = userService.list(userQw);
+        Set<Long> enableUserIds = enableUserList.stream().map(User::getId).collect(Collectors.toSet());
+        return enableUserIds;
     }
 
 }
