@@ -5,12 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.sinn.mapper.PictureMapper;
 import com.sinn.mapper.UserMapper;
-import com.sinn.pojo.Blog;
-import com.sinn.pojo.Love;
-import com.sinn.pojo.Picture;
-import com.sinn.pojo.User;
+import com.sinn.pojo.*;
 import com.sinn.pojo.Vo.BlogVo;
 import com.sinn.service.BlogService;
+import com.sinn.service.FavoriteService;
 import com.sinn.service.LoveService;
 import com.sinn.service.PictureService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +48,9 @@ public class BlogDetailsController {
     @Autowired
     LoveService loveService;
 
+    @Autowired
+    FavoriteService favoriteService;
+
     /**
      * 查看微博的详细页面
      * @param blogId
@@ -84,7 +85,16 @@ public class BlogDetailsController {
             blogVo.setLoveUsers(loveUsers);
         }
 
+        //查询拥有收藏的人
+        LambdaQueryWrapper<Favorite> FavoriteQw=new LambdaQueryWrapper<>();
+        FavoriteQw.eq(Favorite::getBlogId,blogVo.getId());
+        List<Favorite> favoriteList = favoriteService.list(FavoriteQw);
+        Set<Long> collectFavoriteUserIds = favoriteList.stream().map(Favorite::getUserId).collect(Collectors.toSet());
+        if(collectFavoriteUserIds.size()>0){
+            List<User> favoriteUsers = userMapper.selectList(new LambdaQueryWrapper<User>().in(User::getId, collectFavoriteUserIds));
+            blogVo.setFavoriteUsers(favoriteUsers);
 
+        }
 
         model.addAttribute("blogVo",blogVo);
         log.info("此时的blogVo为"+blogVo);
@@ -135,6 +145,48 @@ public class BlogDetailsController {
         loveQw.eq(Love::getBlogId,blogId)
                 .eq(Love::getUserId,loginUser.getId());
         loveService.remove(loveQw);
+
+        return "redirect:/details/"+blogId;
+    }
+
+    /**
+     * 用户收藏一个分享
+     * @param blogId
+     * @param session
+     * @return
+     */
+    @RequestMapping("/{blogId}/favorite")
+    public String addFavoriteBlog(@PathVariable("blogId") Long blogId, HttpSession session){
+        log.info("用户收藏分享");
+        //1.微博收藏人数+1
+        LambdaUpdateWrapper<Blog> blogUw=new LambdaUpdateWrapper<>();
+        blogUw.eq(Blog::getId,blogId)
+                .setSql("favorite_count = favorite_count+1");
+        blogService.update(blogUw);
+        //2.添加关联表关系
+        User loginUser = (User) session.getAttribute("user");
+        Favorite favorite = new Favorite();
+        favorite.setBlogId(blogId);
+        favorite.setUserId(loginUser.getId());
+        favoriteService.save(favorite);
+
+        return "redirect:/details/"+blogId;
+    }
+
+    @RequestMapping("/{blogId}/disfavorite")
+    public String disFavoriteBlog(@PathVariable("blogId") Long blogId, HttpSession session){
+        log.info("用户取消收藏分享");
+        User loginUser = (User) session.getAttribute("user");
+        //1.微博收藏人数-1
+        LambdaUpdateWrapper<Blog> blogUw=new LambdaUpdateWrapper<>();
+        blogUw.eq(Blog::getId,blogId)
+                .setSql("favorite_count = favorite_count-1");
+        blogService.update(blogUw);
+        //2.删除关联表关系
+        LambdaQueryWrapper<Favorite> favoriteQw=new LambdaQueryWrapper<>();
+        favoriteQw.eq(Favorite::getBlogId,blogId)
+                .eq(Favorite::getUserId,loginUser.getId());
+        favoriteService.remove(favoriteQw);
 
         return "redirect:/details/"+blogId;
     }
