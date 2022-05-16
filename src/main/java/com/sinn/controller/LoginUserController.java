@@ -123,6 +123,12 @@ public class LoginUserController {
         return "redirect:/loginUser/"+user.getUserName()+"/blogs";
     }
 
+    /**
+     * 删除新微博
+     * @param blogId
+     * @param session
+     * @return
+     */
     @RequestMapping("/{blogId}/delete")
     public String deleteBlog(@PathVariable("blogId") Integer blogId,HttpSession session){
         User user = (User) session.getAttribute("user");

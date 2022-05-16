@@ -27,6 +27,8 @@ public class User {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    private boolean status;
+
     private Boolean isBan;
     /*//以下是一对多
     @TableField(exist = false)

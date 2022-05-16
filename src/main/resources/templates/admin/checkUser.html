@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
-    <link rel="stylesheet" href="../../static/lib/semanticui/semantic.css">
-    <link rel="stylesheet" href="../../static/css/me.css">
+    <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../../static/lib/semanticui/semantic.css">
+    <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
 </head>
 <body>
 
@@ -17,7 +17,7 @@
                     <h3 class="header ui teal">用户</h3>
                 </div>
                 <div class="right aligned column">
-                    共 <h3 class="ui orange header m-inline-block">3</h3> 个
+                    共 <h3 th:text="${users.size()}" class="ui orange header m-inline-block">3</h3> 个
                 </div>
             </div>
         </div>
@@ -34,7 +34,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.getId()}">1</td>
+                    <td th:text="${user.getUserName()}">lka</td>
+                    <td th:text="${user.isStatus()} ? '可使用' : '已禁用'">可使用</td>
+                    <td>
+                        <a href="#" th:if="${!user.isStatus()}" th:href="@{/admin/{userId}/open(userId=${user.getId()})}" class="ui mini teal basic button">解封</a>
+                        <a href="#" th:if="${user.isStatus()}" th:href="@{/admin/{userId}/ban(userId=${user.getId()})}" class="ui mini red basic button">封禁</a>
+                    </td>
+                </tr>
+                <!--<tr>
                     <td>1</td>
                     <td>lka</td>
                     <td>可使用</td>
@@ -69,19 +78,10 @@
                         <a href="#" class="ui mini teal basic button">解封</a>
                         <a href="#" class="ui mini red basic button">封禁</a>
                     </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>lka</td>
-                    <td>可使用</td>
-                    <td>
-                        <a href="#" class="ui mini teal basic button">解封</a>
-                        <a href="#" class="ui mini red basic button">封禁</a>
-                    </td>
-                </tr>
+                </tr>-->
 
                 </tbody>
-                <tfoot>
+                <!--<tfoot>
                 <tr>
                     <th colspan="4">
                         <div class="ui pagination menu">
@@ -90,7 +90,7 @@
                         </div>
                     </th>
                 </tr>
-                </tfoot>
+                </tfoot>-->
             </table>
         </div>
 
@@ -149,8 +149,8 @@
         </div>
     </div>
 
-    <script src="../../static/js/jquery-3.6.0.js"></script>
-    <script src="../../static/lib/semanticui/semantic.js"></script>
+    <script th:href="@{/js/jquery-3.6.0.js}" src="../../static/js/jquery-3.6.0.js"></script>
+    <script th:href="@{/lib/semanticui/semantic.js}" src="../../static/lib/semanticui/semantic.js"></script>
 
     <script>
         $('.ui.dropdown').dropdown({

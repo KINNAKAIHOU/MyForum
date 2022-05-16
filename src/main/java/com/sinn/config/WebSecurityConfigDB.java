@@ -23,7 +23,7 @@ public class WebSecurityConfigDB extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
     //用户名、密码、状态
-    String pwdQuery="SELECT u.user_name, u.password, is_ban FROM t_user u WHERE user_name=?";
+    String pwdQuery="SELECT u.user_name, u.password, status FROM t_user u WHERE user_name=?";
     //第二个字段表示角色名
     String roleQuery="SELECT u.user_name, r.role_name FROM t_user u, t_user_role ur, t_role r " +
             " WHERE u.id=ur.user_id AND r.id=ur.role_id AND u.user_name=?";
