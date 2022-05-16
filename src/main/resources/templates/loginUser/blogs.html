@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>首页</title>
+    <title>全部分享</title>
     <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../../static/lib/semanticui/semantic.css">
     <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
 </head>
@@ -14,7 +14,7 @@
             <a href="#" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:href="@{/loginUser/{name}/blogs(name=${session.user.getUserName()})}" class="active item"><i class="icon edit"></i>分享</a>
             <div class="item">
-                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                <form name="search" action="#" th:action="@{/search}" method="post">
                     <div class="ui icon inverted transparent input">
                         <input type="text" name="query" placeholder="Search..."  th:value="${query}">
                         <i onclick="document.forms['search'].submit()" class="search link icon "></i>
@@ -71,45 +71,7 @@
                         <a href="#" th:href="@{/loginUser/{blogId}/delete(blogId=${blog.id})}" class="ui mini red basic button">删除</a>
                     </td>
                 </tr>
-<!--                <tr>
-                    <td>2</td>
-                    <td>刻意练习清单</td>
-                    <td>草稿</td>
-                    <td>
-                        <a href="#" class="ui mini teal basic button">查看</a>
-                        <a href="#" class="ui mini red basic button">删除</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>刻意练习清单</td>
-                    <td>草稿</td>
-                    <td>
-                        <a href="#" class="ui mini teal basic button">查看</a>
-                        <a href="#" class="ui mini red basic button">删除</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>刻意练习清单</td>
-                    <td>草稿</td>
-                    <td>
-                        <a href="#" class="ui mini teal basic button">查看</a>
-                        <a href="#" class="ui mini red basic button">删除</a>
-                    </td>
-                </tr>-->
                 </tbody>
-<!--                <tfoot>
-                <tr>
-                    <th colspan="4">
-                        <div class="ui pagination menu">
-                            <a href="#" class="item">上一页</a>
-                            <a href="#" class="item">下一页</a>
-                        </div>
-                        <a href="#" th:href="@{/loginUser/{name}/blogInput(name=${session.user.getUserName()})}" class="ui big right floated blue basic button">发布新的分享</a>
-                    </th>
-                </tr>
-                </tfoot>-->
             </table>
         </div>
 

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>首页</title>
+    <title>分享发布</title>
     <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../../static/lib/semanticui/semantic.css">
     <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
 </head>
@@ -14,7 +14,7 @@
             <a href="#" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:href="@{/loginUser/{name}/blogs(name=${session.user.getUserName()})}" class="active item"><i class="icon edit"></i>分享</a>
             <div class="item">
-                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                <form name="search" action="#" th:action="@{/search}" method="post">
                     <div class="ui icon inverted transparent input">
                         <input type="text" name="query" placeholder="Search..."  th:value="${query}">
                         <i onclick="document.forms['search'].submit()" class="search link icon "></i>

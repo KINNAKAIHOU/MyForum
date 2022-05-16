@@ -177,6 +177,7 @@ public class IndexController {
     public String search(@RequestParam("query") String query,Model model){
         LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
         blogQw.like(Blog::getContent,query)
+                .or()
                 .like(Blog::getTitle,query);
         List<Blog> blogList = blogService.list(blogQw);
         model.addAttribute("blogs",blogList);

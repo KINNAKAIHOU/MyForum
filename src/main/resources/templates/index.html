@@ -14,7 +14,7 @@
             <a href="#" th:if="${userDetails}" th:href="@{/favorites/{name}/blogs(name=${userDetails.getUsername()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:if="${userDetails}"  th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}" class="item"><i class="icon edit"></i>分享</a>
             <div class="item">
-                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                <form name="search" action="#" th:action="@{/search}" method="post">
                     <div class="ui icon inverted transparent input">
                         <input type="text" name="query" placeholder="Search..."  th:value="${query}">
                         <i onclick="document.forms['search'].submit()" class="search link icon "></i>
@@ -443,9 +443,7 @@
                     <div th:each="newBlog : ${newestBlogs}" class="ui segment">
                         <a th:href="@{/details/{blogId}(blogId=${newBlog.getId()})}" href="#" target="_blank" class="m-black"><span th:text="${newBlog.getTitle()}">用户故事(User Story)</span></a>
                     </div>
-<!--                    <div class="ui segment">
-                        <a href="#" target="_blank" class="m-black">用户故事(User Story)</a>
-                    </div>-->
+
                 </div>
             </div>
         </div>
