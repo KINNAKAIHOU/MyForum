@@ -101,12 +101,18 @@ public class IndexController {
         blogQw2.in(Blog::getUserId,enableUserIds)
                 .orderByDesc(Blog::getUpdateTime);
         List<Blog> newestBlogs = blogService.list(blogQw2);
+        List<Blog> newestBlogsLimit = newestBlogs.stream().limit(5).collect(Collectors.toList());
 
         //点赞排行耪
+        LambdaQueryWrapper<Blog> blogQw3=new LambdaQueryWrapper<>();
+        blogQw3.in(Blog::getUserId,enableUserIds)
+                        .orderByDesc(Blog::getLoveCount);
+        List<Blog> loveBlogs = blogService.list(blogQw3);
+        List<Blog> loveBlogsLimit = loveBlogs.stream().limit(3).collect(Collectors.toList());
 
-
+        model.addAttribute("loveBlogs",loveBlogsLimit);
         model.addAttribute("blogVoList",blogVos);
-        model.addAttribute("newestBlogs",newestBlogs);
+        model.addAttribute("newestBlogs",newestBlogsLimit);
         model.addAttribute("userDetails", userDetails);
         return "index";
     }

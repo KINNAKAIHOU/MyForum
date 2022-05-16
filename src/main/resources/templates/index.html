@@ -410,11 +410,11 @@
                     </div>
                     <div class="ui teal segment">
                         <div class="ui fluid vertical menu">
-                            <a href="#" class="item">
-                                上海之声
-                                <div class="ui teal basic left pointing label">13</div>
+                            <a th:each="loveBlog : ${loveBlogs}" th:href="@{/details/{blogId}(blogId=${loveBlog.getId()})}" href="#" class="item">
+                                <span th:text="${loveBlog.getTitle()}">上海之声</span>
+                                <div class="ui teal basic left pointing label" th:text="${loveBlog.getLoveCount()}">13</div>
                             </a>
-                            <a href="#" class="item">
+                            <!--<a href="#" class="item">
                                 四月之声
                                 <div class="ui teal basic left pointing label">13</div>
                             </a>
@@ -425,7 +425,7 @@
                             <a href="#" class="item">
                                 啊啦啦啦啦
                                 <div class="ui teal basic left pointing label">13</div>
-                            </a>
+                            </a>-->
                         </div>
                     </div>
                 </div>
