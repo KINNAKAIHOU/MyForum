@@ -7,6 +7,7 @@ import com.sinn.mapper.PictureMapper;
 import com.sinn.mapper.UserMapper;
 import com.sinn.pojo.*;
 import com.sinn.pojo.Vo.BlogVo;
+import com.sinn.pojo.Vo.CommentVo;
 import com.sinn.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -99,6 +101,14 @@ public class BlogDetailsController {
         LambdaQueryWrapper<Comment> CommentQw=new LambdaQueryWrapper<>();
         CommentQw.eq(Comment::getBlogId,blogVo.getId());
         List<Comment> commentList = commentService.list(CommentQw);
+        List<CommentVo> commentVoList=new ArrayList<>();
+/*        if(commentList.size()>0){
+            for(Comment eachComment : commentList){
+                CommentVo commentVo = new CommentVo();
+                BeanUtils.copyProperties(eachComment,commentVo);
+
+            }
+        }*/
         if(commentList.size()>0){
             blogVo.setComments(commentList);
         }
@@ -196,5 +206,13 @@ public class BlogDetailsController {
         favoriteService.remove(favoriteQw);
 
         return "redirect:/details/"+blogId;
+    }
+
+    /**
+     * 将每一个评论下添加他的回复
+     * @param commentVo
+     */
+    private void addReply(CommentVo commentVo){
+
     }
 }

@@ -15,10 +15,12 @@
             <a href="#" th:if="${session.user}" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:if="${session.user}"  th:href="@{/loginUser/{name}/blogs(name=${session.user}==null ? -1 : ${session.user.getUserName()} )}" class="item"><i class="icon edit"></i>分享</a>
             <div class="item">
-                <div class="ui icon inverted transparent input">
-                    <input type="text" placeholder="Search..."/>
-                    <i class="search link icon "></i>
-                </div>
+                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                    <div class="ui icon inverted transparent input">
+                        <input type="text" name="query" placeholder="Search..."  th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon "></i>
+                    </div>
+                </form>
             </div>
             <div th:unless="${session.user}" class="right menu">
                 <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>

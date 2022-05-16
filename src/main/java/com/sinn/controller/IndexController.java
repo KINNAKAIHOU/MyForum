@@ -169,4 +169,18 @@ public class IndexController {
         return enableUserIds;
     }
 
+    /**
+     * 搜索功能
+     * @return
+     */
+    @PostMapping("/search")
+    public String search(@RequestParam("query") String query,Model model){
+        LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
+        blogQw.like(Blog::getContent,query)
+                .like(Blog::getTitle,query);
+        List<Blog> blogList = blogService.list(blogQw);
+        model.addAttribute("blogs",blogList);
+        return "search";
+    }
+
 }

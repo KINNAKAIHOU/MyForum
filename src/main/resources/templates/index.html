@@ -14,10 +14,18 @@
             <a href="#" th:if="${userDetails}" th:href="@{/favorites/{name}/blogs(name=${userDetails.getUsername()})}" class="item"><i class="icon like"></i>收藏</a>
             <a href="#" th:if="${userDetails}"  th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}" class="item"><i class="icon edit"></i>分享</a>
             <div class="item">
+                <form name="search" action="#" th:action="@{/search}" target="_blank" method="post">
+                    <div class="ui icon inverted transparent input">
+                        <input type="text" name="query" placeholder="Search..."  th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon "></i>
+                    </div>
+                </form>
+                <!--
                 <div class="ui icon inverted transparent input">
                     <input type="text" placeholder="Search..."/>
                     <i class="search link icon "></i>
                 </div>
+                -->
             </div>
             <div th:unless="${userDetails}" class="right menu">
                 <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
@@ -71,11 +79,6 @@
                                 <div class="ui item">
                                     <div class="ui small images">
                                         <img th:each="image : ${blog.getPictures()}" th:src="@{${image.getLocation()}}" class="ui rounded image" src="https://picsum.photos/200" >
-                                        <!--<img class="ui rounded image" src="https://picsum.photos/200" >
-                                        <img class="ui rounded image" src="https://picsum.photos/200" >
-                                        <img class="ui rounded image" src="https://picsum.photos/200" >
-                                        <img class="ui rounded image" src="https://picsum.photos/200" >
-                                        <img class="ui rounded image" src="https://picsum.photos/200" >-->
                                     </div>
                                 </div>
                                 <div class="item">
