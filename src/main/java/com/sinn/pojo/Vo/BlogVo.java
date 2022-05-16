@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,11 +28,11 @@ public class BlogVo extends Blog {
     private List<Picture> pictures;
 
     //评论区
-    private List<Comment> comments;
+    private List<Comment> comments =new LinkedList<>();
 
     //喜欢的人的列表
-    private List<User> loveUsers;
+    private List<User> loveUsers =new LinkedList<>();
 
     //收藏的人的列表
-    private List<User> favoriteUsers;
+    private List<User> favoriteUsers =new LinkedList<>();
 }
