@@ -87,11 +87,19 @@
             <!--下方功能区segment-->
             <div  th:if="${session.user}" class="ui segment attached">
                 <div class="ui three item menu">
-                    <a th:if="(!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star outline"></i>收藏</a>
-                    <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star"></i>取消收藏</a>
+                    <a th:if="(!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item">
+                        <i class="icon star outline"></i> <span th:text="${blogVo.getFavoriteCount()}">收藏</span>
+                    </a>
+                    <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item">
+                        <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
+                    </a>
                     <a class=" item"><i class="icon comment alternate"></i>评论</a>
-                    <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart outline"></i>喜欢</a>
-                    <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart"></i>取消喜欢</a>
+                    <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item">
+                        <i class="icon heart outline"></i><span th:text="${blogVo.getLoveCount()}">喜欢</span>
+                    </a>
+                    <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item">
+                        <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
+                    </a>
                 </div>
             </div>
             <!--评论区-->
