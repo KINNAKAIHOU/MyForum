@@ -36,6 +36,10 @@ public class ImagesController {
         log.info("进入增加图片方法");
         log.info("传递的参数是："+files +"   Id是：  "+blogId);
         StringBuilder sb=new StringBuilder();
+        File desFolder = new File(uploadRootPath);
+        if(!desFolder.exists()){
+            desFolder.mkdir();
+        }
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
                 String orgName = file.getOriginalFilename();
