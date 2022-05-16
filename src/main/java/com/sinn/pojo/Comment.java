@@ -28,9 +28,9 @@ public class Comment {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    private Integer userId;
+    private String userName;
 
-    private Integer BlogId;
+    private Long BlogId;
    /* @TableField(exist = false)
     private Comment parentComment;
     //回复评论
@@ -40,5 +40,4 @@ public class Comment {
     private User user;
     @TableField(exist = false)
     private Blog blog;*/
-    private Integer isDelete;
 }

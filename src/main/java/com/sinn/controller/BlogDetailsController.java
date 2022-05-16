@@ -7,10 +7,7 @@ import com.sinn.mapper.PictureMapper;
 import com.sinn.mapper.UserMapper;
 import com.sinn.pojo.*;
 import com.sinn.pojo.Vo.BlogVo;
-import com.sinn.service.BlogService;
-import com.sinn.service.FavoriteService;
-import com.sinn.service.LoveService;
-import com.sinn.service.PictureService;
+import com.sinn.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,9 @@ public class BlogDetailsController {
 
     @Autowired
     FavoriteService favoriteService;
+
+    @Autowired
+    CommentService commentService;
 
     /**
      * 查看微博的详细页面
@@ -93,7 +93,14 @@ public class BlogDetailsController {
         if(collectFavoriteUserIds.size()>0){
             List<User> favoriteUsers = userMapper.selectList(new LambdaQueryWrapper<User>().in(User::getId, collectFavoriteUserIds));
             blogVo.setFavoriteUsers(favoriteUsers);
+        }
 
+        //查询分享下面的评论
+        LambdaQueryWrapper<Comment> CommentQw=new LambdaQueryWrapper<>();
+        CommentQw.eq(Comment::getBlogId,blogVo.getId());
+        List<Comment> commentList = commentService.list(CommentQw);
+        if(commentList.size()>0){
+            blogVo.setComments(commentList);
         }
 
         model.addAttribute("blogVo",blogVo);

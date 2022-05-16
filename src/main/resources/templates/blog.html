@@ -87,11 +87,11 @@
             <!--下方功能区segment-->
             <div  th:if="${session.user}" class="ui segment attached">
                 <div class="ui three item menu">
-                    <a th:if="!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}" th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star outline"></i>收藏</a>
-                    <a th:if="${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}" th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star"></i>取消收藏</a>
+                    <a th:if="(!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star outline"></i>收藏</a>
+                    <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item"><i class="icon star"></i>取消收藏</a>
                     <a class=" item"><i class="icon comment alternate"></i>评论</a>
-                    <a th:if="!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}" th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart outline"></i>喜欢</a>
-                    <a th:if="${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}" th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart"></i>取消喜欢</a>
+                    <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart outline"></i>喜欢</a>
+                    <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item"><i class="icon heart"></i>取消喜欢</a>
                 </div>
             </div>
             <!--评论区-->
@@ -100,22 +100,22 @@
                 <div class="ui teal segment">
                     <div class="ui comments">
                         <h3 class="ui dividing header">评论区</h3>
-                        <div class="comment">
+                        <div th:each="comment : ${blogVo.getComments()} " class="comment">
                             <a class="avatar">
-                                <img src="https://picsum.photos/id/110/100/100">
+                                <img th:src="@{/icon/userImage.png}" src="/static/icon/userImage.png">
                             </a>
                             <div class="content">
-                                <a class="author">Matt</a>
+                                <a th:text="${comment.getUserName()}" class="author">Matt</a>
                                 <div class="metadata">
-                                    <span class="date">今天下午 5:42</span>
+                                    <span th:text="${comment.getCreateTime()}" class="date">今天下午 5:42</span>
                                 </div>
-                                <div class="text">太赞了！ </div>
-                                <div class="actions">
+                                <div th:text="${comment.getContent()}" class="text">太赞了！ </div>
+<!--                                <div class="actions">
                                     <a class="reply">Reply</a>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
-                        <div class="comment">
+<!--                        <div class="comment">
                             <a class="avatar">
                                 <img src="https://picsum.photos/id/100/100/100">
                             </a>
@@ -163,11 +163,11 @@
                                     <a class="reply">Reply</a>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <!--提交留言区域-->
-                <div th:if="${session.user}" class="ui form">
+                <form th:if="${session.user}" class="ui form" method="post" th:action="@{/comment/{blogId}(blogId=${blogVo.getId()})}">
                     <div class="field">
                         <textarea name="content" placeholder="请输入评论信息..."></textarea>
                     </div>
@@ -176,7 +176,7 @@
                             <button class="ui teal button icon m-mobile-wide"><i class="edit icon"></i> 发布</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
