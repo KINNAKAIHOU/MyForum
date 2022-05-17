@@ -148,13 +148,14 @@ public class IndexController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = new User();
         user.setUserName(username);
+        user.setStatus(true);
         user.setPassword(encoder.encode(password));
         userMapper.insert(user);
         UserRoleRelation relation = new UserRoleRelation();
         relation.setRoleId(2L);
         relation.setUserId(user.getId());
         userRoleRelationMapper.insert(relation);
-        return "index";
+        return "redirect:/index";
     }
 
     /**
