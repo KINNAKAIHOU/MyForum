@@ -72,6 +72,13 @@
                     </td>
                 </tr>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="4">
+                        <a href="#" th:href="@{/loginUser/{name}/blogInput(name=${session.user.getUserName()})}" class="ui big right floated blue basic button">发布新的分享</a>
+                    </th>
+                </tr>
+                </tfoot>
             </table>
         </div>
 

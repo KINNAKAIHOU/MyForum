@@ -116,7 +116,7 @@
                                     <span th:text="${comment.getCreateTime()}" class="date">今天下午 5:42</span>
                                 </div>
                                 <div th:text="${comment.getContent()}" class="text">太赞了！ </div>
-                                <div class="actions">
+                                <div th:if="${session.user}" class="actions">
                                     <a class="reply" data-commentid="1" data-commentnickname="Matt"
                                        th:attr="data-commentid=${comment.getId()},data-commentnickname=${comment.getUserName()},data-rootcommentid=${comment.getId()}"  onclick="reply(this)">回复</a>
                                 </div>
@@ -137,9 +137,9 @@
                                             <span class="date" th:text="${reply.getCreateTime()}">今天下午 5:42</span>
                                         </div>
                                         <div class="text" th:text="${reply.getContent()}">太赞了！ </div>
-                                        <div class="actions">
+                                        <div th:if="${session.user}" class="actions">
                                             <a class="reply" data-commentid="1" data-commentnickname="Matt"
-                                               th:attr="data-commentid=${reply.getId()},data-commentnickname=${reply.getUserName()},data-rootcommentid=${comment.getId()}"  onclick="reply(this)">Reply</a>
+                                               th:attr="data-commentid=${reply.getId()},data-commentnickname=${reply.getUserName()},data-rootcommentid=${comment.getId()}"  onclick="reply(this)">回复</a>
                                         </div>
                                     </div>
 

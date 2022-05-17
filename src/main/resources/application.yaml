@@ -14,7 +14,7 @@ spring:
 logging:
   level:
     root: info
-    com.sinn: debug
+    com.sinn: info
   file:
     name: log/forum-dev.log
 
