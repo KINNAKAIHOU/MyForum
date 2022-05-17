@@ -1,8 +1,10 @@
 package com.sinn.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.sinn.mapper.PictureMapper;
 import com.sinn.mapper.UserMapper;
 import com.sinn.pojo.*;
@@ -19,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,18 +98,23 @@ public class BlogDetailsController {
 
         //查询分享下面的评论
         LambdaQueryWrapper<Comment> CommentQw=new LambdaQueryWrapper<>();
-        CommentQw.eq(Comment::getBlogId,blogVo.getId());
+        //找到全部的根评论：1.根据blogId 2.root评论id是-1 3.根据发布时间来个排序
+        CommentQw.eq(Comment::getBlogId,blogVo.getId())
+                .eq(Comment::getRootCommentId,-1)
+                .orderByDesc(Comment::getCreateTime);
         List<Comment> commentList = commentService.list(CommentQw);
+        log.info("查询到的所有根评论是： "+commentList);
         List<CommentVo> commentVoList=new ArrayList<>();
-/*        if(commentList.size()>0){
+        if(commentList.size()>0){
             for(Comment eachComment : commentList){
                 CommentVo commentVo = new CommentVo();
+                //将全部的根级评论转化为commentVo对象
                 BeanUtils.copyProperties(eachComment,commentVo);
-
+                commentVoList.add(commentVo);
             }
-        }*/
-        if(commentList.size()>0){
-            blogVo.setComments(commentList);
+            addReply(commentVoList);
+            log.info("添加回复后的根评论是：" + commentVoList);
+            blogVo.setComments(commentVoList);
         }
 
         model.addAttribute("blogVo",blogVo);
@@ -208,11 +212,34 @@ public class BlogDetailsController {
         return "redirect:/details/"+blogId;
     }
 
+
     /**
      * 将每一个评论下添加他的回复
-     * @param commentVo
+     * @param commentVoList
+     *
      */
-    private void addReply(CommentVo commentVo){
-
+    private void addReply(List<CommentVo> commentVoList){
+        //1.查全部用户id对应的用户名
+        List<User> userList = userMapper.selectList(null);
+        Map<Long, String> userNameMap = userList.stream().collect(Collectors.toMap(User::getId, User::getUserName));
+        //2.查根节点下的全部评论 Comment
+        for(CommentVo rootComment : commentVoList){
+            LambdaQueryWrapper<Comment> commentQw=new LambdaQueryWrapper<>();
+            commentQw.eq(Comment::getRootCommentId,rootComment.getId());
+            List<Comment> replyList = commentService.list(commentQw);
+            List<CommentVo> replyVoList=new LinkedList<>();
+            //3.对每个评论修改回复姓名 CommentVo
+            for(Comment replyComment : replyList){
+                CommentVo replyCommentVo = new CommentVo();
+                BeanUtils.copyProperties(replyComment,replyCommentVo);
+                Comment parentComment = commentService.getOne(Wrappers.lambdaQuery(Comment.class).eq(Comment::getId, replyCommentVo.getParentCommentId()));
+                replyCommentVo.setParentCommentName(parentComment.getUserName());
+                //4.添加到根节点下
+                replyVoList.add(replyCommentVo);
+            }
+            //5.根节点更新
+            rootComment.setReplyComments(replyVoList);
+        }
     }
+
 }

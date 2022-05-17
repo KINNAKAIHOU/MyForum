@@ -28,6 +28,12 @@ public class Comment {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    //父级评论的id
+    private Long parentCommentId;
+
+    //根级评论的id
+    private Long rootCommentId;
+
     private String userName;
 
     private Long BlogId;

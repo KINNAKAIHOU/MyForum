@@ -25,12 +25,16 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    @PostMapping("/comment/{blogId}")
-    public String addComment(@PathVariable("blogId") Long blogId, @RequestParam("content") String content, HttpSession session){
+    @PostMapping("/comment")
+    public String addComment(@RequestParam("blogId") Long blogId, @RequestParam("content") String content,
+                             @RequestParam("parentCommentId") Long parentCommentId,
+                             @RequestParam("rootCommentId") Long rootCommentId,HttpSession session){
         User loginUser = (User) session.getAttribute("user");
         //1.新建评论存入数据库
         Comment comment = new Comment();
         comment.setBlogId(blogId);
+        comment.setParentCommentId(parentCommentId);
+        comment.setRootCommentId(rootCommentId);
         comment.setUserName(loginUser.getUserName());
         comment.setContent(content);
         commentService.save(comment);

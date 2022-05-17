@@ -18,5 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentVo extends Comment {
     //回复评论
-    private List<Comment> replyComments=new LinkedList<>();
+    private List<CommentVo> replyComments=new LinkedList<>();
+
+    //父节点
+    private String parentCommentName;
 }
