@@ -55,7 +55,8 @@
                         </div>
                     </div>
                     <div class="item">
-                        <i class="calendar icon"></i> <span th:text="${blogVo.getUpdateTime()}">2022-3-29</span>
+                        <i class="calendar icon"></i> <span th:text="${#temporals.format(blogVo.getUpdateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>
+                        <!--<span th:text="${blogVo.getUpdateTime()}">2022-3-29</span>-->
                     </div>
                     <div class="item">
                         <i class="eye icon"></i> <span th:text="${blogVo.getViews()}">2345</span>
@@ -113,7 +114,7 @@
                             <div class="content">
                                 <a th:text="${comment.getUserName()}" class="author">Matt</a>
                                 <div class="metadata">
-                                    <span th:text="${comment.getCreateTime()}" class="date">今天下午 5:42</span>
+                                    <span th:text="${#temporals.format(comment.getCreateTime(),'yyyy-MM-dd HH:mm')}" class="date">今天下午 5:42</span>
                                 </div>
                                 <div th:text="${comment.getContent()}" class="text">太赞了！ </div>
                                 <div th:if="${session.user}" class="actions">
@@ -134,7 +135,7 @@
                                             <span th:text="|@ ${reply.getParentCommentName()}|" class="m-teal">@ Milk</span>
                                         </a>
                                         <div class="metadata">
-                                            <span class="date" th:text="${reply.getCreateTime()}">今天下午 5:42</span>
+                                            <span class="date" th:text="${#temporals.format(reply.getCreateTime(),'yyyy-MM-dd HH:mm')}">今天下午 5:42</span>
                                         </div>
                                         <div class="text" th:text="${reply.getContent()}">太赞了！ </div>
                                         <div th:if="${session.user}" class="actions">
