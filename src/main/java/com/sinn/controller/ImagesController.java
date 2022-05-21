@@ -32,12 +32,12 @@ public class ImagesController {
 
     /*http://localhost:8080/release/images/29*/
     @PostMapping("/release/images/{blogId}")
-    public String upLoadImages(@RequestParam("files") MultipartFile[] files, @PathVariable Integer blogId){
+    public String upLoadImages(@RequestParam("files") MultipartFile[] files, @PathVariable Integer blogId) {
         log.info("进入增加图片方法");
-        log.info("传递的参数是："+files +"   Id是：  "+blogId);
-        StringBuilder sb=new StringBuilder();
+        log.info("传递的参数是：" + files + "   Id是：  " + blogId);
+        StringBuilder sb = new StringBuilder();
         File desFolder = new File(uploadRootPath);
-        if(!desFolder.exists()){
+        if (!desFolder.exists()) {
             desFolder.mkdir();
         }
         for (MultipartFile file : files) {
@@ -50,9 +50,9 @@ public class ImagesController {
                     Picture picture = new Picture();
                     picture.setBlogId(blogId);
                     picture.setName(destName);
-                    picture.setLocation("/image/"+destName);
+                    picture.setLocation("/image/" + destName);
                     pictureService.save(picture);
-                    sb.append(orgName + " 上传成功!"+"\n");
+                    sb.append(orgName + " 上传成功!" + "\n");
                 } catch (IllegalStateException | IOException e) {
                     e.printStackTrace();
                     sb.append(orgName + " 上传失败: " + e.getMessage());

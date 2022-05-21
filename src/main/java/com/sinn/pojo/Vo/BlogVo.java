@@ -28,11 +28,11 @@ public class BlogVo extends Blog {
     private List<Picture> pictures;
 
     //评论区
-    private List<CommentVo> comments =new LinkedList<>();
+    private List<CommentVo> comments = new LinkedList<>();
 
     //喜欢的人的列表
-    private List<User> loveUsers =new LinkedList<>();
+    private List<User> loveUsers = new LinkedList<>();
 
     //收藏的人的列表
-    private List<User> favoriteUsers =new LinkedList<>();
+    private List<User> favoriteUsers = new LinkedList<>();
 }

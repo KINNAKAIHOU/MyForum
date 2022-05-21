@@ -36,7 +36,7 @@ public class WebSecurityConfigUD extends WebSecurityConfigurerAdapter {
 //        log.info("开始授权");
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/loginUser/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/loginUser/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().permitAll()
                 .and()
                 .anonymous()

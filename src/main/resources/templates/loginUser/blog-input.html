@@ -7,245 +7,254 @@
     <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
 </head>
 <body>
-    <!--导航栏-->
-    <div class="ui top fixed teal huge menu inverted">
-        <div class="ui container">
-            <a href="#" th:href="@{/index}" class="item"><i class="home icon"></i>首页</a>
-            <a href="#" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
-            <a href="#" th:href="@{/loginUser/{name}/blogs(name=${session.user.getUserName()})}" class="active item"><i class="icon edit"></i>分享</a>
-            <div class="item">
-                <form name="search" action="#" th:action="@{/search}" method="post">
-                    <div class="ui icon inverted transparent input">
-                        <input type="text" name="query" placeholder="Search..."  th:value="${query}">
-                        <i onclick="document.forms['search'].submit()" class="search link icon "></i>
-                    </div>
-                </form>
-            </div>
-            <div class="right menu">
-                <div class="ui dropdown item">
-                    <div class="text">
-                        <img src="https://picsum.photos/id/76/100/100" alt="" class="ui avatar image">
-                        Sinn
-                    </div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a href="#" th:href="@{/logout}" class="item">注销</a>
-                    </div>
+
+<!--导航栏-->
+<div class="ui top fixed teal huge menu inverted">
+    <div class="ui container">
+        <a href="#" th:href="@{/index}" class="item"><i class="home icon"></i>首页</a>
+        <a href="#" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i
+                class="icon like"></i>收藏</a>
+        <a href="#" th:href="@{/loginUser/{name}/blogs(name=${session.user.getUserName()})}" class="active item"><i
+                class="icon edit"></i>分享</a>
+        <div class="item">
+            <form name="search" action="#" th:action="@{/search}" method="post">
+                <div class="ui icon inverted transparent input">
+                    <input type="text" name="query" placeholder="Search..." th:value="${query}">
+                    <i onclick="document.forms['search'].submit()" class="search link icon "></i>
+                </div>
+            </form>
+        </div>
+        <div class="right menu">
+            <div class="ui dropdown item">
+                <div class="text">
+                    <img src="https://picsum.photos/id/76/100/100" alt="" class="ui avatar image">
+                    Sinn
+                </div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a href="#" th:href="@{/logout}" class="item">注销</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--中间内容-->
-    <div class="ui container m-margin-top-large">
-        <form action="#" id="blog-form" th:object="${blog}" th:action="@{/loginUser/release}" method="post" class="ui form">
-            <!--隐藏域-->
-            <input type="hidden" name="shareStatement">
-            <input type="hidden" name="id" id="blogId" th:value="*{id}">
-            <input type="hidden" name="views" th:value="*{views}">
-            <!--id为隐藏域-->
-            <div class="ui segments">
-                <div class="ui segment">
-                    <!--标题-->
-                    <div class="required ">
-                        <div class="ui labeled field input">
-                            <div class="ui label"> 标 题 </div>
-                            <input type="text" th:value="*{title}" name="title" placeholder="请输入分享的标题">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--输入内容-->
+<!--中间内容-->
+<div class="ui container m-margin-top-large">
+    <form action="#" id="blog-form" th:object="${blog}" th:action="@{/loginUser/release}" method="post" class="ui form">
+        <!--隐藏域-->
+        <input type="hidden" name="shareStatement">
+        <input type="hidden" name="id" id="blogId" th:value="*{id}">
+        <input type="hidden" name="views" th:value="*{views}">
+        <!--id为隐藏域-->
+        <div class="ui segments">
             <div class="ui segment">
-                <div class="field" >
-                    <label>分享内容</label>
-                    <textarea th:text="*{content}" name="content" placeholder="请输入分享内容"></textarea>
-                </div>
-            </div>
-
-            <div class="ui segment">
-                <div class="inline fields">
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input th:checked="*{seeAble}"  type="checkbox" id="seeAble" name="seeAble" class="hidden">
-                            <label for="seeAble">查看</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input th:checked="*{loveAble}" type="checkbox" id="loveAble" name="loveAble" class="hidden">
-                            <label for="loveAble">点赞</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input th:checked="*{commentAble}" type="checkbox" id="commentAble" name="commentAble" class="hidden">
-                            <label for="commentAble">留言</label>
-                        </div>
+                <!--标题-->
+                <div class="required ">
+                    <div class="ui labeled field input">
+                        <div class="ui label"> 标 题</div>
+                        <input type="text" th:value="*{title}" name="title" placeholder="请输入分享的标题">
                     </div>
                 </div>
-
-                <div class="ui error message">
-
-                </div>
-                <div class="ui right aligned container">
-                    <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
-                    <button id="save-btn" class="ui secondary button">保存</button>
-                    <button id="publish-btn" class="ui teal button">发布</button>
-                </div>
             </div>
-        </form>
-
-
-        <!--文件上传表单-->
-
-        <form enctype="multipart/form-data" id="fileForm">
-            <div class="ui action input">
-                <input type="file"  id="files" name="files" multiple accept="image/*" placeholder="添加图片">
-                <button  id="files-btn" type="button" class="ui button">上传图片</button>
-            </div>
-            <!--返回成功消息-->
-            <div class="ui success message"></div>
-        </form>
-
-        <div class="ui small images">
         </div>
-    </div>
+        <!--输入内容-->
+        <div class="ui segment">
+            <div class="field">
+                <label>分享内容</label>
+                <textarea th:text="*{content}" name="content" placeholder="请输入分享内容"></textarea>
+            </div>
+        </div>
 
-    <div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-    </div>
-
-
-    <!--底部footer-->
-    <div class="ui inverted vertical footer segment m-padded-tb-massive">
-        <div class="ui center aligned container">
-            <div class="ui inverted divided stackable grid">
-                <div class="three wide column">
-                    <div class="ui inverted link list">
-                        <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
-                        <div class="ui item">SpringBoot</div>
-                        <div class="ui item">SemanticUI</div>
+        <div class="ui segment">
+            <div class="inline fields">
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input th:checked="*{seeAble}" type="checkbox" id="seeAble" name="seeAble" class="hidden">
+                        <label for="seeAble">查看</label>
                     </div>
                 </div>
-                <div class="three wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
-                    <div class="ui inverted link list">
-                        <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input th:checked="*{loveAble}" type="checkbox" id="loveAble" name="loveAble" class="hidden">
+                        <label for="loveAble">点赞</label>
                     </div>
                 </div>
-                <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
-                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input th:checked="*{commentAble}" type="checkbox" id="commentAble" name="commentAble"
+                               class="hidden">
+                        <label for="commentAble">留言</label>
+                    </div>
                 </div>
             </div>
-            <div class="ui inverted section divider"></div>
-            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+
+            <div class="ui error message"></div>
+
+            <div class="ui right aligned container">
+                <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+                <button id="save-btn" class="ui secondary button">保存</button>
+                <button id="publish-btn" class="ui teal button">发布</button>
+            </div>
         </div>
+    </form>
+
+    <div class="ui error message" th:unless="${#strings.isEmpty(violateMsg)}">
+        <i class="close icon"></i>
+        <div class="header">Tips:</div>
+        <p th:text="${violateMsg}">Congratulations! Optional success</p>
     </div>
 
-    <script th:src="@{/js/jquery-3.6.0.js}" src="../../static/js/jquery-3.6.0.js"></script>
-    <script th:src="@{/lib/semanticui/semantic.js}" src="../../static/lib/semanticui/semantic.js"></script>
 
-    <script>
-        $('.ui.dropdown').dropdown({
-            on : 'hover'
-        });
+    <!--文件上传表单-->
 
-        /*表单验证*/
-        $('.ui.form').form({
-            fields:{
-                title : {
-                    identifier : 'title',
-                    rules : [{
-                        type : 'empty',
-                        prompt : '标题：请输入分享的标题'
-                    }]
-                },
-                detailContent :{
-                    identifier: 'detailContent',
-                    rules: [{
-                        type: 'empty',
-                        prompt: '请输入分享的内容'
-                    }]
-                }
+    <form enctype="multipart/form-data" id="fileForm">
+        <div class="ui action input">
+            <input type="file" id="files" name="files" multiple accept="image/*" placeholder="添加图片">
+            <button id="files-btn" type="button" class="ui button">上传图片</button>
+        </div>
+        <!--返回成功消息-->
+        <div class="ui success message"></div>
+    </form>
+
+    <div class="ui small images">
+    </div>
+</div>
+
+<div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+
+<!--底部footer-->
+<div class="ui inverted vertical footer segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
+                    <div class="ui item">SpringBoot</div>
+                    <div class="ui item">SemanticUI</div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery-3.6.0.js}" src="../../static/js/jquery-3.6.0.js"></script>
+<script th:src="@{/lib/semanticui/semantic.js}" src="../../static/lib/semanticui/semantic.js"></script>
+
+<script>
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    /*表单验证*/
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'title',
+                rules: [{
+                    type: 'empty',
+                    prompt: '标题：请输入分享的标题'
+                }]
+            },
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入分享的内容'
+                }]
             }
-        })
+        }
+    })
 
-        /*微博发布还是保存*/
-        $("#save-btn").click(function (){
-            $("[name='shareStatement']").val(false);
-            $("#blog-form").submit();
-        });
-        $("#publish-btn").click(function (){
-            $("[name='shareStatement']").val(true);
-            $("#blog-form").submit();
-        });
+    /*微博发布还是保存*/
+    $("#save-btn").click(function () {
+        $("[name='shareStatement']").val(false);
+        $("#blog-form").submit();
+    });
+    $("#publish-btn").click(function () {
+        $("[name='shareStatement']").val(true);
+        $("#blog-form").submit();
+    });
 
-        $("#files-btn").click(function (){
-            console.log($("#files").val());
-            if($("#files").val() == ''){
-                return ;
+    $("#files-btn").click(function () {
+        console.log($("#files").val());
+        if ($("#files").val() == '') {
+            return;
+        }
+        console.log("调用上传文件方法")
+        let formData = new FormData();
+        // console.log(document.getElementById("files").firstChild);
+        let fileList = document.getElementById("files");
+        let files = $("#files")[0].files;
+        /*            fileList.addEventListener("change",(event)=>{
+                        let files= event.target.files;
+                        console.log("files: "+files);
+                        for (let i = 0; i < files.length; i++) {
+                            formData.append(files[i].name, files[i])
+                            console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+                        }
+                        console.log("formData： "+formData);
+                    });*/
+        for (let i = 0; i < files.length; i++) {
+            formData.append(files[i].name, files[i])
+            console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+        }
+        $.ajax({
+            url: "http://localhost:8080/release/images/" + $("#blogId").val(),
+            type: 'POST',
+            data: new FormData($("#fileForm")[0]),
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $(".ui.success.message").text(data);
+            },
+            error: function (returnData) {
+                console.log(returnData);
+                $(".ui .error .message").text(returnData);
             }
-            console.log("调用上传文件方法")
-            let formData=new FormData();
-            // console.log(document.getElementById("files").firstChild);
-            let fileList= document.getElementById("files");
-            let files=$("#files")[0].files;
-/*            fileList.addEventListener("change",(event)=>{
-                let files= event.target.files;
-                console.log("files: "+files);
-                for (let i = 0; i < files.length; i++) {
-                    formData.append(files[i].name, files[i])
-                    console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
-                }
-                console.log("formData： "+formData);
-            });*/
-            for (let i = 0; i < files.length; i++) {
-                formData.append(files[i].name, files[i])
-                console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
-            }
-            $.ajax({
-                url: "http://localhost:8080/release/images/"+$("#blogId").val(),
-                type: 'POST',
-                data: new FormData($("#fileForm")[0]),
-                processData : false,
-                contentType : false,
-                async:false,
-                success:function(data) {
-                    console.log(data);
-                    $(".ui.success.message").text(data);
-                },
-                error: function (returnData) {
-                    console.log(returnData);
-                    $(".ui .error .message").text(returnData);
-                }
-            });
-        })
-    </script>
+        });
+    })
+</script>
 </body>
 </html>

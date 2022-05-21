@@ -2,13 +2,17 @@ package com.sinn;
 
 import com.sinn.mapper.UserMapper;
 import com.sinn.pojo.User;
+import com.sinn.pojo.Violate;
 import com.sinn.service.UserService;
+import com.sinn.service.ViolateService;
 import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -23,6 +27,9 @@ public class MyTest {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    ViolateService violateService;
 
     @Test
     public void test1(){
@@ -64,4 +71,9 @@ public class MyTest {
         System.out.println(encoder.matches("123456", encoder.encode("123456")));
     }
 
+    @Test
+    public void Test6(){
+        List<Violate> violates= violateService.list();
+        System.out.println(violates);
+    }
 }

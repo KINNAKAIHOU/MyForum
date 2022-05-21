@@ -7,281 +7,294 @@
     <link rel="stylesheet" th:href="@{/css/me.css}" href="../static/css/me.css">
 </head>
 <body>
-    <!--导航栏-->
-    <!--导航栏-->
-    <div class="ui top fixed teal huge menu inverted">
-        <div class="ui container">
-            <a href="#" th:href="@{/index}" class=" item"><i class="home icon"></i>首页</a>
-            <a href="#" th:if="${session.user}" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}" class="item"><i class="icon like"></i>收藏</a>
-            <a href="#" th:if="${session.user}"  th:href="@{/loginUser/{name}/blogs(name=${session.user}==null ? -1 : ${session.user.getUserName()} )}" class="item"><i class="icon edit"></i>分享</a>
-            <div class="item">
-                <form name="search" action="#" th:action="@{/search}" method="post">
-                    <div class="ui icon inverted transparent input">
-                        <input type="text" name="query" placeholder="Search..."  th:value="${query}">
-                        <i onclick="document.forms['search'].submit()" class="search link icon "></i>
-                    </div>
-                </form>
-            </div>
-            <div th:unless="${session.user}" class="right menu">
-                <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
-                <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
-            </div>
-            <div th:if="${session.user}" class="right menu">
-                <div class="ui dropdown item">
-                    <div class="text" th:text="${session.user.getUserName()}">
-                        Sinn
-                    </div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a href="#" th:href="@{/logout}" class="item">注销</a>
-                    </div>
+<!--导航栏-->
+<!--导航栏-->
+<div class="ui top fixed teal huge menu inverted">
+    <div class="ui container">
+        <a href="#" th:href="@{/index}" class=" item"><i class="home icon"></i>首页</a>
+        <a href="#" th:if="${session.user}" th:href="@{/favorites/{name}/blogs(name=${session.user.getUserName()})}"
+           class="item"><i class="icon like"></i>收藏</a>
+        <a href="#" th:if="${session.user}"
+           th:href="@{/loginUser/{name}/blogs(name=${session.user}==null ? -1 : ${session.user.getUserName()} )}"
+           class="item"><i class="icon edit"></i>分享</a>
+        <div class="item">
+            <form name="search" action="#" th:action="@{/search}" method="post">
+                <div class="ui icon inverted transparent input">
+                    <input type="text" name="query" placeholder="Search..." th:value="${query}">
+                    <i onclick="document.forms['search'].submit()" class="search link icon "></i>
+                </div>
+            </form>
+        </div>
+        <div th:unless="${session.user}" class="right menu">
+            <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
+            <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
+        </div>
+        <div th:if="${session.user}" class="right menu">
+            <div class="ui dropdown item">
+                <div class="text" th:text="${session.user.getUserName()}">
+                    Sinn
+                </div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a href="#" th:href="@{/logout}" class="item">注销</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--中间内容-->
-    <div class="ui container m-margin-top-large">
-        <div class="ui segments">
-            <!--显示作者信息部分-->
-            <div class="ui segment">
-                <div class="ui horizontal link list">
-                    <div class="item">
-                        <img th:src="@{/icon/userImage.png}" src="https://picsum.photos/id/110/150/200" alt="" class="ui avatar image">
-                        <div class="content">
-                            <div th:text="${blogVo.getUserName()}" class="header ">
-                                Sitweling
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="calendar icon"></i> <span th:text="${blogVo.getUpdateTime()}">2022-3-29</span>
-                    </div>
-                    <div class="item">
-                        <i class="eye icon"></i> <span th:text="${blogVo.getViews()}">2345</span>
-                    </div>
-                </div>
-            </div>
-            <!--显示正文内容部分-->
-            <div class="ui segment">
+<!--中间内容-->
+<div class="ui container m-margin-top-large">
+    <div class="ui segments">
+        <!--显示作者信息部分-->
+        <div class="ui segment">
+            <div class="ui horizontal link list">
                 <div class="item">
-                    <p th:text="${blogVo.getContent()}" class="ui text m-padded-all-huge m-text">【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
-                </div>
-                <div class="ui item">
-                    <div class="ui images">
-                        <div th:each="blogPic : ${blogVo.getPictures()}" class="item">
-                            <img th:src="@{${blogPic.getLocation()}}" class="ui centered image" src="https://picsum.photos/800/600" >
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--下方功能区segment-->
-            <div  th:if="${session.user}" class="ui segment attached">
-                <div class="ui three item menu">
-                    <a th:if="(!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item">
-                        <i class="icon star outline"></i> <span th:text="${blogVo.getFavoriteCount()}">收藏</span>
-                    </a>
-                    <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item">
-                        <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
-                    </a>
-                    <a class=" item"><i class="icon comment alternate"></i>评论</a>
-                    <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item">
-                        <i class="icon heart outline"></i><span th:text="${blogVo.getLoveCount()}">喜欢</span>
-                    </a>
-                    <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})" th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item">
-                        <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
-                    </a>
-                </div>
-            </div>
-            <!--评论区-->
-            <div id="comment-container" th:if="${blogVo.isCommentAble()}" class="ui bottom attached segment">
-                <!--留言区域-->
-                <div class="ui teal segment">
-                    <div class="ui comments">
-                        <h3 class="ui dividing header">评论区</h3>
-                        <div th:if="${blogVo.getComments().size()==0}" class="ui comment">
-                            <div class="content">
-                                目前还没有留言哦
-                            </div>
-                        </div>
-                        <!--这里的comment是一个CommentVo对象-->
-                        <div th:each="comment : ${blogVo.getComments()} " class="comment">
-                            <a class="avatar">
-                                <img th:src="@{/icon/userImage.png}" src="/static/icon/userImage.png">
-                            </a>
-                            <div class="content">
-                                <a th:text="${comment.getUserName()}" class="author">Matt</a>
-                                <div class="metadata">
-                                    <span th:text="${comment.getCreateTime()}" class="date">今天下午 5:42</span>
-                                </div>
-                                <div th:text="${comment.getContent()}" class="text">太赞了！ </div>
-                                <div th:if="${session.user}" class="actions">
-                                    <a class="reply" data-commentid="1" data-commentnickname="Matt"
-                                       th:attr="data-commentid=${comment.getId()},data-commentnickname=${comment.getUserName()},data-rootcommentid=${comment.getId()}"  onclick="reply(this)">回复</a>
-                                </div>
-                            </div>
-                            <!--嵌套评论，第二层-->
-                            <div class="comments" th:if="${#arrays.length(comment.getReplyComments())}>0">
-                                <!--回复评论的每一个reply也是一个commentVo-->
-                                <div class="comment" th:each="reply : ${comment.getReplyComments()}">
-                                    <a class="avatar">
-                                        <img src="https://picsum.photos/id/110/100/100" th:src="@{/icon/userImage.png}">
-                                    </a>
-                                    <div class="content">
-                                        <a class="author" >
-                                            <span th:text="${reply.getUserName()}">Matt</span>
-                                            <span th:text="|@ ${reply.getParentCommentName()}|" class="m-teal">@ Milk</span>
-                                        </a>
-                                        <div class="metadata">
-                                            <span class="date" th:text="${reply.getCreateTime()}">今天下午 5:42</span>
-                                        </div>
-                                        <div class="text" th:text="${reply.getContent()}">太赞了！ </div>
-                                        <div th:if="${session.user}" class="actions">
-                                            <a class="reply" data-commentid="1" data-commentnickname="Matt"
-                                               th:attr="data-commentid=${reply.getId()},data-commentnickname=${reply.getUserName()},data-rootcommentid=${comment.getId()}"  onclick="reply(this)">回复</a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-<!--                        <div class="comment">
-                            <a class="avatar">
-                                <img src="https://picsum.photos/id/100/100/100">
-                            </a>
-                            <div class="content">
-                                <a class="author">Elliot Fu</a>
-                                <div class="metadata">
-                                    <span class="date">昨天上午12:30</span>
-                                </div>
-                                <div class="text">
-                                    <p>這對我的研究是非常有用.謝謝!</p>
-                                </div>
-                                <div class="actions">
-                                    <a class="reply">Reply</a>
-                                </div>
-                            </div>
-                            <div class="comments">
-                                <div class="comment">
-                                    <a class="avatar">
-                                        <img src="https://picsum.photos/id/130/100/100">
-                                    </a>
-                                    <div class="content">
-                                        <a class="author">Jenny Hess</a>
-                                        <div class="metadata">
-                                            <span class="date">刚刚</span>
-                                        </div>
-                                        <div class="text">艾略特你永远是多么正确 :) </div>
-                                        <div class="actions">
-                                            <a class="reply">Reply</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <a class="avatar">
-                                <img src="https://picsum.photos/id/111/100/100">
-                            </a>
-                            <div class="content">
-                                <a class="author">Joe Henderson</a>
-                                <div class="metadata">
-                                    <span class="date">5 天以前</span>
-                                </div>
-                                <div class="text">老兄，这太棒了。非常感谢。 </div>
-                                <div class="actions">
-                                    <a class="reply">Reply</a>
-                                </div>
-                            </div>
-                        </div>-->
-                    </div>
-                </div>
-                <!--提交留言区域-->
-                <form th:if="${session.user}" class="ui form" method="post" th:action="@{/comment}">
-                    <input type="hidden" name="blogId" th:value="${blogVo.getId()}">
-                    <input type="hidden" name="parentCommentId" value="-1">
-                    <input type="hidden" name="rootCommentId" value="-1">
-                    <div class="field">
-                        <textarea name="content" placeholder="请输入评论信息..."></textarea>
-                    </div>
-                    <div class="fields">
-                        <div class="right aligned field">
-                            <button class="ui teal button icon m-mobile-wide"><i class="edit icon"></i> 发布</button>
+                    <img th:src="@{/icon/userImage.png}" src="https://picsum.photos/id/110/150/200" alt=""
+                         class="ui avatar image">
+                    <div class="content">
+                        <div th:text="${blogVo.getUserName()}" class="header ">
+                            Sitweling
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="item">
+                    <i class="calendar icon"></i> <span
+                        th:text="${#temporals.format(blogVo.getUpdateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>
+                </div>
+                <div class="item">
+                    <i class="eye icon"></i> <span th:text="${blogVo.getViews()}">2345</span>
+                </div>
             </div>
         </div>
+        <!--显示正文内容部分-->
+        <div class="ui segment">
+            <div class="item">
+                <p th:text="${blogVo.getContent()}" class="ui text m-padded-all-huge m-text">
+                    【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
+            </div>
+            <div class="ui item">
+                <div class="ui images">
+                    <div th:each="blogPic : ${blogVo.getPictures()}" class="item">
+                        <img th:src="@{${blogPic.getLocation()}}" class="ui centered image"
+                             src="https://picsum.photos/800/600">
+                    </div>
 
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <!--底部footer-->
-    <div class="ui inverted vertical segment m-padded-tb-massive">
-        <div class="ui center aligned container">
-            <div class="ui inverted divided stackable grid">
-                <div class="three wide column">
-                    <div class="ui inverted link list">
-                        <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
-                        <div class="ui item">SpringBoot</div>
-                        <div class="ui item">SemanticUI</div>
-                    </div>
-                </div>
-                <div class="three wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
-                    <div class="ui inverted link list">
-                        <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
-                    </div>
-                </div>
-                <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
-                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
                 </div>
             </div>
-            <div class="ui inverted section divider"></div>
-            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+        </div>
+        <!--下方功能区segment-->
+        <div th:if="${session.user}" class="ui segment attached">
+            <div class="ui three item menu">
+                <a th:if="(!${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
+                   th:href="@{/details/{blogId}/favorite(blogId=${blogVo.getId()})}" class=" item">
+                    <i class="icon star outline"></i> <span th:text="${blogVo.getFavoriteCount()}">收藏</span>
+                </a>
+                <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
+                   th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item">
+                    <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
+                </a>
+                <a class=" item"><i class="icon comment alternate"></i>评论</a>
+                <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
+                   th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item">
+                    <i class="icon heart outline"></i><span th:text="${blogVo.getLoveCount()}">喜欢</span>
+                </a>
+                <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
+                   th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item">
+                    <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
+                </a>
+            </div>
+        </div>
+        <!--评论区-->
+        <div id="comment-container" th:if="${blogVo.isCommentAble()}" class="ui bottom attached segment">
+            <!--留言区域-->
+            <div class="ui teal segment">
+                <div class="ui comments">
+                    <h3 class="ui dividing header">评论区</h3>
+                    <div th:if="${blogVo.getComments().size()==0}" class="ui comment">
+                        <div class="content">
+                            目前还没有留言哦
+                        </div>
+                    </div>
+                    <!--这里的comment是一个CommentVo对象-->
+                    <div th:each="comment : ${blogVo.getComments()} " class="comment">
+                        <a class="avatar">
+                            <img th:src="@{/icon/userImage.png}" src="/static/icon/userImage.png">
+                        </a>
+                        <div class="content">
+                            <a th:text="${comment.getUserName()}" class="author">Matt</a>
+                            <div class="metadata">
+                                <span th:text="${#temporals.format(comment.getCreateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>
+                            </div>
+                            <div th:text="${comment.getContent()}" class="text">太赞了！</div>
+                            <div th:if="${session.user}" class="actions">
+                                <a class="reply" data-commentid="1" data-commentnickname="Matt"
+                                   th:attr="data-commentid=${comment.getId()},data-commentnickname=${comment.getUserName()},data-rootcommentid=${comment.getId()}"
+                                   onclick="reply(this)">回复</a>
+                            </div>
+                        </div>
+                        <!--嵌套评论，第二层-->
+                        <div class="comments" th:if="${#arrays.length(comment.getReplyComments())}>0">
+                            <!--回复评论的每一个reply也是一个commentVo-->
+                            <div class="comment" th:each="reply : ${comment.getReplyComments()}">
+                                <a class="avatar">
+                                    <img src="https://picsum.photos/id/110/100/100" th:src="@{/icon/userImage.png}">
+                                </a>
+                                <div class="content">
+                                    <a class="author">
+                                        <span th:text="${reply.getUserName()}">Matt</span>
+                                        <span th:text="|@ ${reply.getParentCommentName()}|" class="m-teal">@ Milk</span>
+                                    </a>
+                                    <div class="metadata">
+                                        <span th:text="${#temporals.format(reply.getCreateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>n>
+                                    </div>
+                                    <div class="text" th:text="${reply.getContent()}">太赞了！</div>
+                                    <div th:if="${session.user}" class="actions">
+                                        <a class="reply" data-commentid="1" data-commentnickname="Matt"
+                                           th:attr="data-commentid=${reply.getId()},data-commentnickname=${reply.getUserName()},data-rootcommentid=${comment.getId()}"
+                                           onclick="reply(this)">回复</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--                        <div class="comment">
+                                                <a class="avatar">
+                                                    <img src="https://picsum.photos/id/100/100/100">
+                                                </a>
+                                                <div class="content">
+                                                    <a class="author">Elliot Fu</a>
+                                                    <div class="metadata">
+                                                        <span class="date">昨天上午12:30</span>
+                                                    </div>
+                                                    <div class="text">
+                                                        <p>這對我的研究是非常有用.謝謝!</p>
+                                                    </div>
+                                                    <div class="actions">
+                                                        <a class="reply">Reply</a>
+                                                    </div>
+                                                </div>
+                                                <div class="comments">
+                                                    <div class="comment">
+                                                        <a class="avatar">
+                                                            <img src="https://picsum.photos/id/130/100/100">
+                                                        </a>
+                                                        <div class="content">
+                                                            <a class="author">Jenny Hess</a>
+                                                            <div class="metadata">
+                                                                <span class="date">刚刚</span>
+                                                            </div>
+                                                            <div class="text">艾略特你永远是多么正确 :) </div>
+                                                            <div class="actions">
+                                                                <a class="reply">Reply</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="comment">
+                                                <a class="avatar">
+                                                    <img src="https://picsum.photos/id/111/100/100">
+                                                </a>
+                                                <div class="content">
+                                                    <a class="author">Joe Henderson</a>
+                                                    <div class="metadata">
+                                                        <span class="date">5 天以前</span>
+                                                    </div>
+                                                    <div class="text">老兄，这太棒了。非常感谢。 </div>
+                                                    <div class="actions">
+                                                        <a class="reply">Reply</a>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+                </div>
+            </div>
+            <!--提交留言区域-->
+            <form th:if="${session.user}" class="ui form" method="post" th:action="@{/comment}">
+                <input type="hidden" name="blogId" th:value="${blogVo.getId()}">
+                <input type="hidden" name="parentCommentId" value="-1">
+                <input type="hidden" name="rootCommentId" value="-1">
+                <div class="field">
+                    <textarea name="content" placeholder="请输入评论信息..."></textarea>
+                </div>
+                <div class="fields">
+                    <div class="right aligned field">
+                        <button class="ui teal button icon m-mobile-wide"><i class="edit icon"></i> 发布</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
-    <script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
-    <script>
-        $('.ui.dropdown').dropdown({
-            on : 'hover'
-        });
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部footer-->
+<div class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
+                    <div class="ui item">SpringBoot</div>
+                    <div class="ui item">SemanticUI</div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+    </div>
+</div>
 
-        function reply(obj) {
-            let commentId = $(obj).data('commentid');
-            let commentNickname = $(obj).data('commentnickname');
-            let rootCommentId = $(obj).data('rootcommentid');
-            $("[name='content']").attr("placeholder", "回复@"+commentNickname).focus();
-            $("[name='parentCommentId']").val(commentId);
-            $("[name='rootCommentId']").val(rootCommentId);
-        }
-    </script>
+<script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+<script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+<script>
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    function reply(obj) {
+        let commentId = $(obj).data('commentid');
+        let commentNickname = $(obj).data('commentnickname');
+        let rootCommentId = $(obj).data('rootcommentid');
+        $("[name='content']").attr("placeholder", "回复@" + commentNickname).focus();
+        $("[name='parentCommentId']").val(commentId);
+        $("[name='rootCommentId']").val(rootCommentId);
+    }
+</script>
 </body>
 </html>

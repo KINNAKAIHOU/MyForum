@@ -50,46 +50,47 @@ public class IndexController {
 
     @Autowired
     UserRoleRelationMapper userRoleRelationMapper;
+
     /**
      * 直接进入首页
      * 判断是否已经登陆，未登录则直接进入首页
      * 已登陆的情况下，将User对象放入Session中
      * 加入已存在的微博渲染
+     *
      * @return index
      */
-    @RequestMapping({"/","/index"})
+    @RequestMapping({"/", "/index"})
     public String index(Model model, Authentication auth, HttpSession session) {
         UserDetails userDetails = null;
         if (auth != null) {
             userDetails = (UserDetails) auth.getPrincipal();
-            LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
-            queryWrapper.eq(User::getUserName,userDetails.getUsername());
+            LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(User::getUserName, userDetails.getUsername());
             User user = userService.getOne(queryWrapper);
-            session.setAttribute("user",user);
+            session.setAttribute("user", user);
         }
         //渲染微博
         Set<Long> enableUserIds = getEnableUserIds();
 
-        LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
-        blogQw.eq(Blog::isShareStatement,true)     //是分享状态
-                 .eq(Blog::isSeeAble,true)        //是可见状态
-                .in(Blog::getUserId,enableUserIds)    //用户是可用状态
+        LambdaQueryWrapper<Blog> blogQw = new LambdaQueryWrapper<>();
+        blogQw.eq(Blog::isShareStatement, true)     //是分享状态
+                .eq(Blog::isSeeAble, true)        //是可见状态
+                .in(Blog::getUserId, enableUserIds)    //用户是可用状态
                 .orderByDesc(Blog::getUpdateTime);
         List<Blog> blogList = blogService.list(blogQw);
-            //获取其他信息封装成Vo
-        List<BlogVo> blogVos=new LinkedList<>();
-        for(Blog eachBlog: blogList){
+        //获取其他信息封装成Vo
+        List<BlogVo> blogVos = new LinkedList<>();
+        for (Blog eachBlog : blogList) {
             BlogVo blogVo = new BlogVo();
-            BeanUtils.copyProperties(eachBlog,blogVo);
+            BeanUtils.copyProperties(eachBlog, blogVo);
             //1.封装用户名信息
             User AuthorUser = userMapper.selectById(blogVo.getUserId());
             blogVo.setUserName(AuthorUser.getUserName());
             //2.封装图片信息
-            LambdaQueryWrapper<Picture> pictureQw=new LambdaQueryWrapper<>();
-            pictureQw.eq(Picture::getBlogId,blogVo.getId());
+            LambdaQueryWrapper<Picture> pictureQw = new LambdaQueryWrapper<>();
+            pictureQw.eq(Picture::getBlogId, blogVo.getId());
             List<Picture> pictureList = pictureService.list(pictureQw);
             blogVo.setPictures(pictureList);
-
 
             //最后添加
             blogVos.add(blogVo);
@@ -97,54 +98,57 @@ public class IndexController {
 
 
         //侧边栏最新发布微博
-        LambdaQueryWrapper<Blog> blogQw2=new LambdaQueryWrapper<>();
-        blogQw2.in(Blog::getUserId,enableUserIds)
+        LambdaQueryWrapper<Blog> blogQw2 = new LambdaQueryWrapper<>();
+        blogQw2.in(Blog::getUserId, enableUserIds)
                 .orderByDesc(Blog::getUpdateTime);
         List<Blog> newestBlogs = blogService.list(blogQw2);
         List<Blog> newestBlogsLimit = newestBlogs.stream().limit(5).collect(Collectors.toList());
 
         //点赞排行耪
-        LambdaQueryWrapper<Blog> blogQw3=new LambdaQueryWrapper<>();
-        blogQw3.in(Blog::getUserId,enableUserIds)
-                        .orderByDesc(Blog::getLoveCount);
+        LambdaQueryWrapper<Blog> blogQw3 = new LambdaQueryWrapper<>();
+        blogQw3.in(Blog::getUserId, enableUserIds)
+                .orderByDesc(Blog::getLoveCount);
         List<Blog> loveBlogs = blogService.list(blogQw3);
         List<Blog> loveBlogsLimit = loveBlogs.stream().limit(3).collect(Collectors.toList());
 
-        model.addAttribute("loveBlogs",loveBlogsLimit);
-        model.addAttribute("blogVoList",blogVos);
-        model.addAttribute("newestBlogs",newestBlogsLimit);
+        model.addAttribute("loveBlogs", loveBlogsLimit);
+        model.addAttribute("blogVoList", blogVos);
+        model.addAttribute("newestBlogs", newestBlogsLimit);
         model.addAttribute("userDetails", userDetails);
         return "index";
     }
 
     /**
      * 前往登陆页面
+     *
      * @return login
      */
     @RequestMapping("/toLogin")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
 
 
     /**
      * 前往注册界面
+     *
      * @return
      */
     @RequestMapping("/toRegister")
-    public String toRegister(){
+    public String toRegister() {
         return "register";
     }
 
     /**
      * 注册用户，只要求输入用户名和密码，用户名是唯一的
      * 通过MP字段自动注入完成注册日期，并且添加授权
+     *
      * @param username
      * @param password
      * @return
      */
     @PostMapping("/register")
-    public String register(String username,String password){
+    public String register(String username, String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = new User();
         user.setUserName(username);
@@ -160,11 +164,12 @@ public class IndexController {
 
     /**
      * 获取可用状态下的UserIds，封装成一个Set返回
+     *
      * @return
      */
-    public Set<Long> getEnableUserIds(){
-        LambdaQueryWrapper<User> userQw=new LambdaQueryWrapper<>();
-        userQw.eq(User::isStatus,true);
+    public Set<Long> getEnableUserIds() {
+        LambdaQueryWrapper<User> userQw = new LambdaQueryWrapper<>();
+        userQw.eq(User::isStatus, true);
         List<User> enableUserList = userService.list(userQw);
         Set<Long> enableUserIds = enableUserList.stream().map(User::getId).collect(Collectors.toSet());
         return enableUserIds;
@@ -172,17 +177,27 @@ public class IndexController {
 
     /**
      * 搜索功能
+     *
      * @return
      */
     @PostMapping("/search")
-    public String search(@RequestParam("query") String query,Model model){
-        LambdaQueryWrapper<Blog> blogQw=new LambdaQueryWrapper<>();
-        blogQw.like(Blog::getContent,query)
+    public String search(@RequestParam("query") String query, Model model, Authentication auth, HttpSession session) {
+        LambdaQueryWrapper<Blog> blogQw = new LambdaQueryWrapper<>();
+        blogQw.like(Blog::getContent, query)
                 .or()
-                .like(Blog::getTitle,query);
+                .like(Blog::getTitle, query);
         List<Blog> blogList = blogService.list(blogQw);
-        model.addAttribute("blogs",blogList);
-        return "search";
+        UserDetails userDetails = null;
+        if (auth != null) {
+            userDetails = (UserDetails) auth.getPrincipal();
+            LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(User::getUserName, userDetails.getUsername());
+            User user = userService.getOne(queryWrapper);
+            session.setAttribute("user", user);
+        }
+        model.addAttribute("blogs", blogList);
+        model.addAttribute("userDetails", userDetails);
+        return "/search";
     }
 
 }

@@ -19,6 +19,6 @@ public class MyConfigurer implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //addResourceHandler是指你设置的虚拟路径，前端展示页面时填入这个路径来进行访问
         //addResourceLocations是指实际的本地路径，你需要代理给虚拟路径来访问的路径
-        registry.addResourceHandler("/image/**").addResourceLocations("file:"+uploadRootPath);
+        registry.addResourceHandler("/image/**").addResourceLocations("file:" + uploadRootPath);
     }
 }

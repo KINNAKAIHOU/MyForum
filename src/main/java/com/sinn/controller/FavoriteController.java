@@ -50,6 +50,7 @@ public class FavoriteController {
 
     /**
      * 从首页点进去自己收藏的微博，跳转页面并且显示微博
+     *
      * @param name
      * @param model
      * @param session
@@ -57,47 +58,48 @@ public class FavoriteController {
      * @return
      */
     @GetMapping("/{name}/blogs")
-    public String toMyFavorite(@PathVariable("name") String name, Model model, HttpSession session, Authentication auth){
+    public String toMyFavorite(@PathVariable("name") String name, Model model, HttpSession session, Authentication auth) {
         User loginUser = (User) session.getAttribute("user");
-        log.info("从session中获取到的user对象是："+loginUser);
-        if(!Objects.equals(loginUser.getUserName(), name)){
+        log.info("从session中获取到的user对象是：" + loginUser);
+        if (!Objects.equals(loginUser.getUserName(), name)) {
             log.warn("非法访问！");
         }
-        LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName,name);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserName, name);
         User nowUser = userService.getOne(queryWrapper);
         UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(nowUser,userVo);
-        log.info("现在的UserVo是"+userVo);
-        log.info("UserVo的其他属性？" +userVo.getUserName()+"   "+userVo.getId());
-        LambdaQueryWrapper<Favorite> favoriteQW=new LambdaQueryWrapper<>();
-        favoriteQW.eq(Favorite::getUserId,userVo.getId());
+        BeanUtils.copyProperties(nowUser, userVo);
+        log.info("现在的UserVo是" + userVo);
+        log.info("UserVo的其他属性？" + userVo.getUserName() + "   " + userVo.getId());
+        LambdaQueryWrapper<Favorite> favoriteQW = new LambdaQueryWrapper<>();
+        favoriteQW.eq(Favorite::getUserId, userVo.getId());
         List<Favorite> favoriteList = favoriteService.list(favoriteQW);
         Set<Long> blogIds = favoriteList.stream().map(Favorite::getBlogId).collect(Collectors.toSet());
-        if(blogIds.size()>0){
+        if (blogIds.size() > 0) {
             List<Blog> blogList = blogMapper.selectList(Wrappers.lambdaQuery(Blog.class).in(Blog::getId, blogIds));
             userVo.setFavorites(blogList);
         }
-        log.info("现在塞入attribute的userVo是："+userVo);
-        model.addAttribute("userVo",userVo);
+        log.info("现在塞入attribute的userVo是：" + userVo);
+        model.addAttribute("userVo", userVo);
         return "/loginUser/favorites";
     }
 
     /**
      * 删除收藏的微博
+     *
      * @param blogId
      * @param session
      * @return
      */
     @RequestMapping("/{blogId}/delete")
-    public String deleteFavorite(@PathVariable("blogId") Long blogId,HttpSession session){
+    public String deleteFavorite(@PathVariable("blogId") Long blogId, HttpSession session) {
         User loginUser = (User) session.getAttribute("user");
-        log.info("从session中获取到的user对象是："+loginUser);
-        LambdaQueryWrapper<Favorite> favoriteQW=new LambdaQueryWrapper<>();
-        favoriteQW.eq(Favorite::getUserId,loginUser.getId())
-                .eq(Favorite::getBlogId,blogId);
+        log.info("从session中获取到的user对象是：" + loginUser);
+        LambdaQueryWrapper<Favorite> favoriteQW = new LambdaQueryWrapper<>();
+        favoriteQW.eq(Favorite::getUserId, loginUser.getId())
+                .eq(Favorite::getBlogId, blogId);
         favoriteService.remove(favoriteQW);
         log.info("收藏已经删除");
-        return "redirect:"+"/favorites/"+loginUser.getUserName()+"/blogs";
+        return "redirect:" + "/favorites/" + loginUser.getUserName() + "/blogs";
     }
 }

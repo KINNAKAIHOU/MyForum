@@ -22,6 +22,6 @@ public class UserVo extends User {
     //权限集合
     List<Role> roles;
     //收藏集合
-    List<Blog> favorites=new ArrayList<>();
+    List<Blog> favorites = new ArrayList<>();
 
 }

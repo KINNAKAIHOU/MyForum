@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>违禁词管理</title>
+    <link rel="stylesheet" th:href="@{/lib/semanticui/semantic.css}" href="../../static/lib/semanticui/semantic.css">
+    <link rel="stylesheet" th:href="@{/css/me.css}" href="../../static/css/me.css">
+</head>
+<body>
+
+<!--导航栏-->
+<div class="ui top fixed teal huge menu inverted">
+    <div class="ui container">
+        <a href="#" th:href="@{/admin}" class="item"><i class="home icon"></i>用户</a>
+        <a href="#" th:href="@{/admin/violate}" class="item"><i class="home icon"></i>违禁词</a>
+    </div>
+</div>
+
+<!--中间内容-->
+<div class="ui container m-margin-top-large">
+    <form action="#" id="violate-form" th:action="@{/admin/violate/add}" method="post" class="ui form">
+        <!--头部-->
+        <div class="ui segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="header ui teal">封禁词</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h3 th:text="${violates.size()}" class="ui orange header m-inline-block">3</h3> 个
+                </div>
+            </div>
+        </div>
+
+        <!--放置用户内容-->
+        <div class="ui segment teal">
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th class="three wide">UID</th>
+                    <th class="eight wide">封禁词</th>
+                    <th class="three wide">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="violate : ${violates}">
+                    <td th:text="${violate.getId()}">1</td>
+                    <td th:text="${violate.getViolateName()}">lka</td>
+                    <td>
+                        <a href="#" th:href="@{/admin/violate/{violateId}(violateId=${violate.getId()})}"
+                           class="ui mini red basic button">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="field">
+            <div class="ui fluid action input ">
+                <input type="text" name="violateName" placeholder="添加违禁词...">
+                <button class="ui teal button icon m-mobile-wide"><i class="edit ic error meson"></i> 添加</button>
+            </div>
+        </div>
+        <div class="ui error message"></div>
+    </form>
+</div>
+
+<script th:src="@{/js/jquery-3.6.0.js}" src="../../static/js/jquery-3.6.0.js"></script>
+<script th:src="@{/lib/semanticui/semantic.js}" src="../../static/lib/semanticui/semantic.js"></script>
+
+<script>
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    /*表单验证*/
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'title',
+                rules: [{
+                    type: 'empty',
+                    prompt: '标题：请输入分享的标题'
+                }]
+            },
+            violateName: {
+                identifier: 'violateName',
+                rules: [{
+                    type: 'empty',
+                    prompt: '违禁词不能为空'
+                }]
+            }
+        }
+    })
+
+    /*微博发布还是保存*/
+    $("#save-btn").click(function () {
+        $("[name='shareStatement']").val(false);
+        $("#blog-form").submit();
+    });
+    $("#publish-btn").click(function () {
+        $("[name='shareStatement']").val(true);
+        $("#blog-form").submit();
+    });
+
+    $("#files-btn").click(function () {
+        console.log($("#files").val());
+        if ($("#files").val() == '') {
+            return;
+        }
+        console.log("调用上传文件方法")
+        let formData = new FormData();
+        // console.log(document.getElementById("files").firstChild);
+        let fileList = document.getElementById("files");
+        let files = $("#files")[0].files;
+        /*            fileList.addEventListener("change",(event)=>{
+                        let files= event.target.files;
+                        console.log("files: "+files);
+                        for (let i = 0; i < files.length; i++) {
+                            formData.append(files[i].name, files[i])
+                            console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+                        }
+                        console.log("formData： "+formData);
+                    });*/
+        for (let i = 0; i < files.length; i++) {
+            formData.append(files[i].name, files[i])
+            console.log(`${files[i].name} (${files[i].type}, ${files[i].size} bytes)`)
+        }
+        $.ajax({
+            url: "http://localhost:8080/release/images/" + $("#blogId").val(),
+            type: 'POST',
+            data: new FormData($("#fileForm")[0]),
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $(".ui.success.message").text(data);
+            },
+            error: function (returnData) {
+                console.log(returnData);
+                $(".ui .error .message").text(returnData);
+            }
+        });
+    })
+</script>
+</body>
+</html>

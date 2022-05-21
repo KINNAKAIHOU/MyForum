@@ -7,166 +7,175 @@
     <link rel="stylesheet" th:href="@{/css/me.css}" href="../static/css/me.css">
 </head>
 <body>
-    <!--导航栏-->
-    <div class="ui top fixed teal huge menu inverted">
-        <div class="ui container">
-            <a href="#" th:href="@{/index}" class="active item"><i class="home icon"></i>首页</a>
-            <a href="#" th:if="${userDetails}" th:href="@{/favorites/{name}/blogs(name=${userDetails.getUsername()})}" class="item"><i class="icon like"></i>收藏</a>
-            <a href="#" th:if="${userDetails}"  th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}" class="item"><i class="icon edit"></i>分享</a>
-            <div class="item">
-                <form name="search" action="#" th:action="@{/search}" method="post">
-                    <div class="ui icon inverted transparent input">
-                        <input type="text" name="query" placeholder="Search..."  th:value="${query}">
-                        <i onclick="document.forms['search'].submit()" class="search link icon "></i>
-                    </div>
-                </form>
-                <!--
+<!--导航栏-->
+<div class="ui top fixed teal huge menu inverted">
+    <div class="ui container">
+        <a href="#" th:href="@{/index}" class="active item"><i class="home icon"></i>首页</a>
+        <a href="#" th:if="${userDetails}" th:href="@{/favorites/{name}/blogs(name=${userDetails.getUsername()})}"
+           class="item"><i class="icon like"></i>收藏</a>
+        <a href="#" th:if="${userDetails}"
+           th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}"
+           class="item"><i class="icon edit"></i>分享</a>
+        <div class="item">
+            <form name="search" action="#" th:action="@{/search}" method="post">
                 <div class="ui icon inverted transparent input">
-                    <input type="text" placeholder="Search..."/>
-                    <i class="search link icon "></i>
+                    <input type="text" name="query" placeholder="Search..." th:value="${query}">
+                    <i onclick="document.forms['search'].submit()" class="search link icon "></i>
                 </div>
-                -->
+            </form>
+            <!--
+            <div class="ui icon inverted transparent input">
+                <input type="text" placeholder="Search..."/>
+                <i class="search link icon "></i>
             </div>
-            <div th:unless="${userDetails}" class="right menu">
-                <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
-                <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
-            </div>
-            <div th:if="${userDetails}" class="right menu">
-                <div class="ui dropdown item">
-                    <div class="text" th:text="${userDetails.getUsername()}">
-                        Sinn
-                    </div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a href="#" th:href="@{/logout}" class="item">注销</a>
-                    </div>
+            -->
+        </div>
+        <div th:unless="${userDetails}" class="right menu">
+            <a th:href="@{/toLogin}" class="ui large item button"><i class="icon sign-in"></i>登录</a>
+            <a th:href="@{/toRegister}" class="ui large item button"><i class="icon edit"></i>注册</a>
+        </div>
+        <div th:if="${userDetails}" class="right menu">
+            <div class="ui dropdown item">
+                <div class="text" th:text="${userDetails.getUsername()}">
+                    Sinn
+                </div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a href="#" th:href="@{/logout}" class="item">注销</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!--中间内容-->
-    <div class="ui container m-margin-top-large">
-        <!--16等分-->
-        <div class="ui grid">
-            <!--左边11等份-->
-            <div class="ui eleven wide column">
-                <!--一个内容-->
-                <div th:each="blog : ${blogVoList}" class="ui divided padded raised segments m-margin-bottom-large">
-                    <!--第一个segment放正文内容-->
-                    <div class="ui segment attached">
-                        <div class="ui grid">
-                            <!--长度2列放头像-->
-                            <div class="ui two wide column">
-                                <img th:src="@{/icon/userImage.png}" src="https://picsum.photos/seed/picsum/100/100" style="width: 100px;" class="ui image circular">
+<!--中间内容-->
+<div class="ui container m-margin-top-large">
+    <!--16等分-->
+    <div class="ui grid">
+        <!--左边11等份-->
+        <div class="ui eleven wide column">
+            <!--一个内容-->
+            <div th:each="blog : ${blogVoList}" class="ui divided padded raised segments m-margin-bottom-large">
+                <!--第一个segment放正文内容-->
+                <div class="ui segment attached">
+                    <div class="ui grid">
+                        <!--长度2列放头像-->
+                        <div class="ui two wide column">
+                            <img th:src="@{/icon/userImage.png}" src="https://picsum.photos/seed/picsum/100/100"
+                                 style="width: 100px;" class="ui image circular">
+                        </div>
+                        <!--剩下14列放正文内容-->
+                        <div class="ui fourteen wide column">
+                            <div class="item">
+                                <p th:text="${blog.getUserName()}">人民日报</p>
                             </div>
-                            <!--剩下14列放正文内容-->
-                            <div class="ui fourteen wide column">
+                            <div class="ui horizontal list item">
                                 <div class="item">
-                                    <p th:text="${blog.getUserName()}">人民日报</p>
-                                </div>
-                                <div class="ui horizontal list item">
-                                    <div class="item">
-                                        <i class="calendar alternate icon"></i> <span th:text="${blog.getCreateTime()}">2022-3-29</span>
-                                    </div>
-                                    <div class="item">
-                                        <i class="eye icon"></i> <span th:text="${blog.getViews()}">2345</span>
-                                    </div>
+                                    <i class="calendar alternate icon"></i> <span th:text="${#temporals.format(blog.getUpdateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>
                                 </div>
                                 <div class="item">
-                                    <p th:text="${blog.getContent()}" class="ui text">【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
+                                    <i class="eye icon"></i> <span th:text="${blog.getViews()}">2345</span>
                                 </div>
-                                <div class="ui item">
-                                    <div class="ui small images">
-                                        <img th:each="image : ${blog.getPictures()}" th:src="@{${image.getLocation()}}" class="ui rounded image" src="https://picsum.photos/200" >
-                                    </div>
+                            </div>
+                            <div class="item">
+                                <p th:text="${blog.getContent()}" class="ui text">
+                                    【#上海22日新增本土死亡12例#】4月22日0—24时，上海新增本土死亡12例。平均年龄88.2岁，最大年龄99岁。12位患者均合并有严重的慢性多脏器疾病，包括支气管哮喘，呼吸功能衰竭，冠心病，心功能不全，心律失常，高血压，脑梗后遗症，阿尔兹海默症等。患者入院后，因原发基础疾病严重，病情进展迅速，经抢救无效死亡。死亡的直接原因均为基础疾病。 </p>
+                            </div>
+                            <div class="ui item">
+                                <div class="ui small images">
+                                    <img th:each="image : ${blog.getPictures()}" th:src="@{${image.getLocation()}}"
+                                         class="ui rounded image" src="https://picsum.photos/200">
                                 </div>
-                                <div class="item">
-                                    <a th:href="@{/details/{blogId}(blogId=${blog.getId()})}" href="#"><i class="ui icon angle double right"></i>查看详情</a>
-                                </div>
+                            </div>
+                            <div class="item">
+                                <a th:href="@{/details/{blogId}(blogId=${blog.getId()})}" href="#"><i
+                                        class="ui icon angle double right"></i>查看详情</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--右侧属性栏5等份-->
-            <div class="ui five wide column">
-                <!--分类-->
-                <div class="ui segments">
-                    <div class="ui secondary segment">
-                        <i class="icon thumbs up outline"></i>点赞榜
-                    </div>
-                    <div class="ui teal segment">
-                        <div class="ui fluid vertical menu">
-                            <a th:each="loveBlog : ${loveBlogs}" th:href="@{/details/{blogId}(blogId=${loveBlog.getId()})}" href="#" class="item">
-                                <span th:text="${loveBlog.getTitle()}">上海之声</span>
-                                <div class="ui teal basic left pointing label" th:text="${loveBlog.getLoveCount()}">13</div>
-                            </a>
-                            <!--<a href="#" class="item">
-                                四月之声
-                                <div class="ui teal basic left pointing label">13</div>
-                            </a>
-                            <a href="#" class="item">
-                                四月是你的谎言
-                                <div class="ui teal basic left pointing label">13</div>
-                            </a>
-                            <a href="#" class="item">
-                                啊啦啦啦啦
-                                <div class="ui teal basic left pointing label">13</div>
-                            </a>-->
-                        </div>
+        </div>
+        <!--右侧属性栏5等份-->
+        <div class="ui five wide column">
+            <!--分类-->
+            <div class="ui segments">
+                <div class="ui secondary segment">
+                    <i class="icon thumbs up outline"></i>点赞榜
+                </div>
+                <div class="ui teal segment">
+                    <div class="ui fluid vertical menu">
+                        <a th:each="loveBlog : ${loveBlogs}" th:href="@{/details/{blogId}(blogId=${loveBlog.getId()})}"
+                           href="#" class="item">
+                            <span th:text="${loveBlog.getTitle()}">上海之声</span>
+                            <div class="ui teal basic left pointing label" th:text="${loveBlog.getLoveCount()}">13</div>
+                        </a>
+                        <!--<a href="#" class="item">
+                            四月之声
+                            <div class="ui teal basic left pointing label">13</div>
+                        </a>
+                        <a href="#" class="item">
+                            四月是你的谎言
+                            <div class="ui teal basic left pointing label">13</div>
+                        </a>
+                        <a href="#" class="item">
+                            啊啦啦啦啦
+                            <div class="ui teal basic left pointing label">13</div>
+                        </a>-->
                     </div>
                 </div>
-                <!--最新推荐-->
-                <div class="ui segments m-margin-top-big">
-                    <div class="ui secondary segment">
-                        <i class="icon bookmark"></i>最新发布
-                    </div>
-                    <div class="ui red segment">
-
-                    </div>
-                    <div th:each="newBlog : ${newestBlogs}" class="ui segment">
-                        <a th:href="@{/details/{blogId}(blogId=${newBlog.getId()})}" href="#" target="_blank" class="m-black"><span th:text="${newBlog.getTitle()}">用户故事(User Story)</span></a>
-                    </div>
+            </div>
+            <!--最新推荐-->
+            <div class="ui segments m-margin-top-big">
+                <div class="ui secondary segment">
+                    <i class="icon bookmark"></i>最新发布
+                </div>
+                <div class="ui red segment">
 
                 </div>
+                <div th:each="newBlog : ${newestBlogs}" class="ui segment">
+                    <a th:href="@{/details/{blogId}(blogId=${newBlog.getId()})}" href="#" target="_blank"
+                       class="m-black"><span th:text="${newBlog.getTitle()}">用户故事(User Story)</span></a>
+                </div>
+
             </div>
         </div>
     </div>
+</div>
 
-    <!--底部footer-->
-    <div class="ui inverted vertical segment m-padded-tb-massive">
-        <div class="ui center aligned container">
-            <div class="ui inverted divided stackable grid">
-                <div class="three wide column">
-                    <div class="ui inverted link list">
-                        <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
-                        <div class="ui item">SpringBoot</div>
-                        <div class="ui item">SemanticUI</div>
-                    </div>
-                </div>
-                <div class="three wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
-                    <div class="ui inverted link list">
-                        <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
-                    </div>
-                </div>
-                <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
-                    <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+<!--底部footer-->
+<div class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <h4 class="ui inverted header m-text-thin m-text-spaced ">使用技术</h4>
+                    <div class="ui item">SpringBoot</div>
+                    <div class="ui item">SemanticUI</div>
                 </div>
             </div>
-            <div class="ui inverted section divider"></div>
-            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：937019004@qq.com</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">ShareBlog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是华南农业大学大学现代软件技术开发课程的课程设计作业，欢迎使用</p>
+            </div>
         </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2022 - 2023</p>
     </div>
+</div>
 
-    <script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
-    <script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
-    <script>
-        $('.ui.dropdown').dropdown({
-            on : 'hover'
-        });
-    </script>
+<script th:src="@{/js/jquery-3.6.0.js}" src="../static/js/jquery-3.6.0.js"></script>
+<script th:src="@{/lib/semanticui/semantic.js}" src="../static/lib/semanticui/semantic.js"></script>
+<script>
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+</script>
 </body>
 </html>

@@ -42,29 +42,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName,username);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserName, username);
         User user = userService.getOne(queryWrapper);
 
-        LambdaQueryWrapper<UserRoleRelation> queryWrapper2=new LambdaQueryWrapper<>();
-        queryWrapper2.ge(UserRoleRelation::getUserId,user.getId());
+        LambdaQueryWrapper<UserRoleRelation> queryWrapper2 = new LambdaQueryWrapper<>();
+        queryWrapper2.eq(UserRoleRelation::getUserId, user.getId());
         List<UserRoleRelation> selectList = userRoleRelationMapper.selectList(queryWrapper2);
         Set<Long> roleIds = selectList.stream().map(UserRoleRelation::getRoleId).collect(Collectors.toSet());
 
-        LambdaQueryWrapper<Role> queryWrapper3=new LambdaQueryWrapper<>();
-        queryWrapper3.in(Role::getId,roleIds);
+        LambdaQueryWrapper<Role> queryWrapper3 = new LambdaQueryWrapper<>();
+        queryWrapper3.in(Role::getId, roleIds);
         List<Role> roles = roleMapper.selectList(queryWrapper3);
-        return toUserDetails(user,roles);
+        return toUserDetails(user, roles);
     }
 
-    private UserDetails toUserDetails(User user, List<Role> roles){
-        List<GrantedAuthority> authorityList=new ArrayList<>();
-        for(Role role :roles){
+    private UserDetails toUserDetails(User user, List<Role> roles) {
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        for (Role role : roles) {
             GrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
             authorityList.add(authority);
         }
-        UserDetails userDetails=new org.springframework.security.core.userdetails.User(user.getUserName(),
-                user.getPassword(), user.getIsBan(),true,true,true,authorityList);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUserName(),
+                user.getPassword(), user.getIsBan(), true, true, true, authorityList);
         return userDetails;
     }
 }
