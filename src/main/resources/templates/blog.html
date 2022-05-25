@@ -95,20 +95,16 @@
                     <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
                 </a>
                 <!--禁止收藏-->
-                <a th:if="!${blogVo.isLoveAble()}" href="#" class="item">
-                    <button class="ui button disabled">
+                <button th:if="!${blogVo.isLoveAble()}" class="ui button disabled item">
                         <i class="icon star outline"></i>
-                        <span th:text="${blogVo.getFavoriteCount()}">分享禁止收藏</span>
-                    </button>
-                </a>
-                <a class=" item"><i class="icon comment alternate"></i>评论</a>
+                        <span>分享禁止收藏</span>
+                </button>
+                <a th:if="${blogVo.isCommentAble()}" class=" item"><i class="icon comment alternate"></i>评论</a>
                 <!--禁止评论-->
-                <a th:if="!${blogVo.isCommentAble()}" href="#" class="item">
-                    <button class="ui button disabled">
+                <button th:if="!${blogVo.isCommentAble()}" class="ui button disabled item">
                         <i class="icon microphone slash"></i>
                         <span>分享禁止评论</span>
-                    </button>
-                </a>
+                </button>
                 <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
                    th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item">
                     <i class="icon heart outline"></i><span th:text="${blogVo.getLoveCount()}">喜欢</span>
@@ -118,12 +114,10 @@
                     <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
                 </a>
                 <!--禁止喜欢-->
-                <a th:if="!${blogVo.isLoveAble()}" href="#" class="item">
-                    <button class="ui button disabled">
+                <button th:if="!${blogVo.isLoveAble()}" class="ui button disabled item">
                         <i class="icon heart outline"></i>
-                        <span th:text="${blogVo.getLoveCount()}">分享禁止喜欢</span>
-                    </button>
-                </a>
+                        <span>分享禁止喜欢</span>
+                </button>
             </div>
         </div>
         <!--评论区-->
