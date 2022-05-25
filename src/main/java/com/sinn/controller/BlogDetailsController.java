@@ -102,7 +102,7 @@ public class BlogDetailsController {
         //找到全部的根评论：1.根据blogId 2.root评论id是-1 3.根据发布时间来个排序
         CommentQw.eq(Comment::getBlogId, blogVo.getId())
                 .eq(Comment::getRootCommentId, -1)
-                .orderByDesc(Comment::getCreateTime);
+                .orderByAsc(Comment::getCreateTime);
         List<Comment> commentList = commentService.list(CommentQw);
         log.info("查询到的所有根评论是： " + commentList);
         List<CommentVo> commentVoList = new ArrayList<>();

@@ -94,7 +94,21 @@
                    th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item">
                     <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
                 </a>
+                <!--禁止收藏-->
+                <a th:if="!${blogVo.isLoveAble()}" href="#" class="item">
+                    <button class="ui button disabled">
+                        <i class="icon star outline"></i>
+                        <span th:text="${blogVo.getFavoriteCount()}">分享禁止收藏</span>
+                    </button>
+                </a>
                 <a class=" item"><i class="icon comment alternate"></i>评论</a>
+                <!--禁止评论-->
+                <a th:if="!${blogVo.isCommentAble()}" href="#" class="item">
+                    <button class="ui button disabled">
+                        <i class="icon microphone slash"></i>
+                        <span>分享禁止评论</span>
+                    </button>
+                </a>
                 <a th:if="(!${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
                    th:href="@{/details/{blogId}/like(blogId=${blogVo.getId()})}" class=" item">
                     <i class="icon heart outline"></i><span th:text="${blogVo.getLoveCount()}">喜欢</span>
@@ -102,6 +116,13 @@
                 <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
                    th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item">
                     <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
+                </a>
+                <!--禁止喜欢-->
+                <a th:if="!${blogVo.isLoveAble()}" href="#" class="item">
+                    <button class="ui button disabled">
+                        <i class="icon heart outline"></i>
+                        <span th:text="${blogVo.getLoveCount()}">分享禁止喜欢</span>
+                    </button>
                 </a>
             </div>
         </div>
@@ -146,7 +167,7 @@
                                         <span th:text="|@ ${reply.getParentCommentName()}|" class="m-teal">@ Milk</span>
                                     </a>
                                     <div class="metadata">
-                                        <span th:text="${#temporals.format(reply.getCreateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>n>
+                                        <span th:text="${#temporals.format(reply.getCreateTime(),'yyyy-MM-dd HH:mm')}">2022-3-29</span>
                                     </div>
                                     <div class="text" th:text="${reply.getContent()}">太赞了！</div>
                                     <div th:if="${session.user}" class="actions">

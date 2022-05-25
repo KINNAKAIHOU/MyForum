@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -148,10 +149,15 @@ public class IndexController {
      * @return
      */
     @PostMapping("/register")
-    public String register(String username, String password) {
+    public String register(String username, String password, Model model) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = new User();
         user.setUserName(username);
+        User isRegister = userService.lambdaQuery().eq(User::getUserName, username).one();
+        if(null!=isRegister){
+            model.addAttribute("msg","该用户名已存在");
+            return "register";
+        }
         user.setStatus(true);
         user.setPassword(encoder.encode(password));
         userMapper.insert(user);

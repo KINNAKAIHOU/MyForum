@@ -49,7 +49,7 @@ public class FavoriteController {
     BlogMapper blogMapper;
 
     /**
-     * 从首页点进去自己收藏的微博，跳转页面并且显示微博
+     * 从首页点进去自己收藏的微博，跳转页面并且显示微博 ,增加Auth安全性
      *
      * @param name
      * @param model
@@ -64,8 +64,9 @@ public class FavoriteController {
         if (!Objects.equals(loginUser.getUserName(), name)) {
             log.warn("非法访问！");
         }
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName, name);
+        queryWrapper.eq(User::getUserName, principal.getUsername());
         User nowUser = userService.getOne(queryWrapper);
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(nowUser, userVo);

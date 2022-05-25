@@ -16,6 +16,10 @@
         <a href="#" th:if="${userDetails}"
            th:href="@{/loginUser/{name}/blogs(name=${userDetails}==null ? -1 : ${userDetails.getUsername()} )}"
            class="item"><i class="icon edit"></i>分享</a>
+        <!--管理员特有-->
+        <a href="#" th:if="${(userDetails!=null) and (#strings.contains(userDetails.getAuthorities(),'ADMIN'))}"
+           th:href="@{/admin}"
+           class="item"><i class="icon user secret"></i>管理页面</a>
         <div class="item">
             <form name="search" action="#" th:action="@{/search}" method="post">
                 <div class="ui icon inverted transparent input">
