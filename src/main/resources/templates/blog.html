@@ -92,7 +92,7 @@
                 </a>
                 <a th:if="(${#strings.contains(blogVo.getFavoriteUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
                    th:href="@{/details/{blogId}/disfavorite(blogId=${blogVo.getId()})}" class=" item">
-                    <i class="icon star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
+                    <i class="icon yellow star"></i><span th:text="${blogVo.getFavoriteCount()}">取消收藏</span>
                 </a>
                 <!--禁止收藏-->
                 <button th:if="!${blogVo.isLoveAble()}" class="ui button disabled item">
@@ -111,7 +111,7 @@
                 </a>
                 <a th:if="(${#strings.contains(blogVo.getLoveUsers(),session.user.getUserName())}) and (${blogVo.isLoveAble()})"
                    th:href="@{/details/{blogId}/dislike(blogId=${blogVo.getId()})}" class=" item">
-                    <i class="icon heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
+                    <i class="icon red heart"></i><span th:text="${blogVo.getLoveCount()}">取消喜欢</span>
                 </a>
                 <!--禁止喜欢-->
                 <button th:if="!${blogVo.isLoveAble()}" class="ui button disabled item">
