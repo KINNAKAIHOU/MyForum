@@ -66,8 +66,11 @@
                 <td th:text="${state.count}">1</td>
                 <td th:text="${blog.title}">刻意练习清单</td>
                 <td>
-                    <a href="#" th:href="@{/details/{blogId}(blogId=${blog.id})}"
+                    <a th:if="${blog.isLoveAble() && blog.isSeeAble() && blog.isShareStatement()}" href="#" th:href="@{/details/{blogId}(blogId=${blog.id})}"
                        class="ui mini teal basic button">查看</a>
+                    <!--失效-->
+                    <a th:unless="${blog.isLoveAble() && blog.isSeeAble() && blog.isShareStatement()}" href="#" th:href="@{/details/{blogId}(blogId=${blog.id})}"
+                       class="ui mini teal basic button disabled">已失效</a>
                     <a href="#" th:href="@{/favorites/{blogId}/delete(blogId=${blog.id})}"
                        class="ui mini red basic button">删除</a>
                 </td>
