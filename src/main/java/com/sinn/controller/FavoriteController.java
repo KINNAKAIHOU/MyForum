@@ -9,6 +9,7 @@ import com.sinn.pojo.Blog;
 import com.sinn.pojo.Favorite;
 import com.sinn.pojo.User;
 import com.sinn.pojo.Vo.UserVo;
+import com.sinn.service.BlogService;
 import com.sinn.service.FavoriteService;
 import com.sinn.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,9 @@ public class FavoriteController {
 
     @Autowired
     BlogMapper blogMapper;
+
+    @Autowired
+    BlogService blogService;
 
     /**
      * 从首页点进去自己收藏的微博，跳转页面并且显示微博 ,增加Auth安全性
@@ -100,6 +104,7 @@ public class FavoriteController {
         favoriteQW.eq(Favorite::getUserId, loginUser.getId())
                 .eq(Favorite::getBlogId, blogId);
         favoriteService.remove(favoriteQW);
+        blogService.lambdaUpdate().eq(Blog::getId,blogId).setSql("favorite_count = favorite_count-1").update();
         log.info("收藏已经删除");
         return "redirect:" + "/favorites/" + loginUser.getUserName() + "/blogs";
     }
