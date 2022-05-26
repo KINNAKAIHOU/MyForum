@@ -69,7 +69,7 @@
                     <a th:if="${blog.isLoveAble() && blog.isSeeAble() && blog.isShareStatement()}" href="#" th:href="@{/details/{blogId}(blogId=${blog.id})}"
                        class="ui mini teal basic button">查看</a>
                     <!--失效-->
-                    <a th:unless="${blog.isLoveAble() && blog.isSeeAble() && blog.isShareStatement()}" href="#" th:href="@{/details/{blogId}(blogId=${blog.id})}"
+                    <a th:unless="${blog.isLoveAble() && blog.isSeeAble() && blog.isShareStatement()}" href="#"
                        class="ui mini teal basic button disabled">已失效</a>
                     <a href="#" th:href="@{/favorites/{blogId}/delete(blogId=${blog.id})}"
                        class="ui mini red basic button">删除</a>
