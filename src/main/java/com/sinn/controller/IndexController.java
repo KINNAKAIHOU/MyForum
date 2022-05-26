@@ -100,14 +100,18 @@ public class IndexController {
 
         //侧边栏最新发布微博
         LambdaQueryWrapper<Blog> blogQw2 = new LambdaQueryWrapper<>();
-        blogQw2.in(Blog::getUserId, enableUserIds)
-                .orderByDesc(Blog::getUpdateTime);
+        blogQw2.in(Blog::getUserId, enableUserIds)  //用户是可用状态
+                .eq(Blog::isShareStatement, true)     //是分享状态
+                .eq(Blog::isSeeAble, true)        //是可见状态
+                .orderByDesc(Blog::getCreateTime);
         List<Blog> newestBlogs = blogService.list(blogQw2);
         List<Blog> newestBlogsLimit = newestBlogs.stream().limit(5).collect(Collectors.toList());
 
         //点赞排行耪
         LambdaQueryWrapper<Blog> blogQw3 = new LambdaQueryWrapper<>();
-        blogQw3.in(Blog::getUserId, enableUserIds)
+        blogQw3.in(Blog::getUserId, enableUserIds)    //用户是可用状态
+                .eq(Blog::isShareStatement, true)     //是分享状态
+                .eq(Blog::isSeeAble, true)        //是可见状态
                 .orderByDesc(Blog::getLoveCount);
         List<Blog> loveBlogs = blogService.list(blogQw3);
         List<Blog> loveBlogsLimit = loveBlogs.stream().limit(3).collect(Collectors.toList());
